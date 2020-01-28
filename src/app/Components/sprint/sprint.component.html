@@ -1,0 +1,52 @@
+<p>weather-forecast works!</p>
+
+
+<mat-list>
+  <mat-list-item *ngFor="let sprint of sprints">
+    <h3 matLine> {{sprint.sprintId}} </h3>
+    <p matLine>
+      <span> {{sprint.sprintName}} </span>
+      <span class="demo-2"> -- {{sprint.sprintPoints}} </span>
+    </p>
+  </mat-list-item>
+</mat-list>
+
+<!-- code for adding sprint -->
+<!-- Main Toolbar of an App -->    
+<mat-toolbar color="purple">    
+  <span>Create sprint</span>    
+  <span class="demo-toolbar"></span>       
+  
+</mat-toolbar>    
+  
+<mat-card>    
+  <!-- Title of an Card -->    
+  <mat-card-title>    
+      Angular Material Component With Angular 5    
+  </mat-card-title>    
+  
+  <mat-card-content>    
+      <form [formGroup]="sprintForm" (ngSubmit)="onSubmit()">    
+          <table>    
+              <tr>    
+                  <td>    
+                      <mat-form-field >    
+                          <input matInput placeholder="sprint Name" formControlName="sprintName" required>    
+                      </mat-form-field>    
+                  </td>    
+                  <td>    
+                      <mat-form-field class="demo-full-width">    
+                          <input matInput placeholder="sprintPoints" formControlName="sprintPoints" required>    
+                      </mat-form-field>    
+                  </td>    
+              </tr>                 
+              <tr>    
+                  <td colspan="2" class="content-center">    
+                      <button mat-raised-button color="accent" type="submit" [disabled]="!sprintForm.valid">Submit</button>    
+                      <button mat-raised-button color="accent">Clear</button>    
+                  </td>    
+              </tr>    
+          </table>    
+      </form>    
+  </mat-card-content>    
+</mat-card>  
