@@ -10,8 +10,6 @@ import { MatTableDataSource, MatSort } from '@angular/material';
   styleUrls: ['./sprint.component.scss']
 })
 export class SprintComponent implements OnInit ,AfterViewInit{
-
-   sprints:GetSprintData[];
    
   public dataSource = new MatTableDataSource<GetSprintData>();
   public displayedColumns = ['sprintName','sprintPoints', 'startDate','endDate','details','update', 'delete'];
@@ -20,12 +18,10 @@ export class SprintComponent implements OnInit ,AfterViewInit{
 
   constructor(private route:ActivatedRoute,private router:Router)
    { 
-     this.sprints=[];
    }
 
   ngOnInit() {   
       this.getSprintList();
-      //this.dataSource.sort=this.sort;
   }
 
   ngAfterViewInit(): void {
@@ -36,10 +32,9 @@ export class SprintComponent implements OnInit ,AfterViewInit{
   {
     let sprint:SprintsClient = new SprintsClient();
     sprint.getSprints().then(res=>{
-        console.log(res);  
-        this.sprints=res;      
+        console.log(res);       
        this.dataSource.data = res as GetSprintData[];        
     });
   }
-  
+
 }
