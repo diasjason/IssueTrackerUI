@@ -1,42 +1,45 @@
-import { Component, OnInit } from '@angular/core';
-import { SprintsClient, CreateSprintRequest}from 'src/app/services/issue-tracker.service';
+import { Component, OnInit,ViewChild, AfterViewInit } from '@angular/core';
+import { SprintsClient, CreateSprintRequest, GetSprintData, Sprint}from 'src/app/services/issue-tracker.service';
 import { FormGroup, Validators ,FormBuilder} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatTableDataSource, MatSort } from '@angular/material';
 
 @Component({
   selector: 'app-sprint',
   templateUrl: './sprint.component.html',
   styleUrls: ['./sprint.component.scss']
 })
-export class SprintComponent implements OnInit {
+export class SprintComponent implements OnInit ,AfterViewInit{
 
-  sprintForm:FormGroup;
-  constructor(private route:ActivatedRoute,private router:Router,private fb:FormBuilder)
-   { }
+   sprints:GetSprintData[];
+   
+  public dataSource = new MatTableDataSource<GetSprintData>();
+  public displayedColumns = ['sprintName','sprintPoints', 'startDate','endDate','details','update', 'delete'];
 
-  ngOnInit() {
-    
-      this.sprintForm=this.fb.group({
-        sprintName:['',[Validators.required,Validators.minLength(5)]],
-        sprintPoints:['',Validators.required],
-        startDate:'2020/04/02',
-        EndDate:'2020/05/03',
-        createdBy:'placi'
-      });  
+   @ViewChild(MatSort,{static:false}) sort: MatSort;
+
+  constructor(private route:ActivatedRoute,private router:Router)
+   { 
+     this.sprints=[];
+   }
+
+  ngOnInit() {   
+      this.getSprintList();
+      //this.dataSource.sort=this.sort;
   }
 
-  onSubmit(){
-    this.CreateSprint(this.sprintForm.value);
-   }
- 
-   CreateSprint(formvalues){
-       let sprint:SprintsClient = new SprintsClient();
-       
-       let newSprint: CreateSprintRequest = new CreateSprintRequest();;
-       newSprint.sprintName = formvalues.sprintName;
-       newSprint.sprintPoints = formvalues.sprintPoints;
-       newSprint.startDate = new Date();
-       newSprint.endDate = new Date();
-       sprint.postSprint(newSprint);
-   }
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
+  }
+  
+  getSprintList()
+  {
+    let sprint:SprintsClient = new SprintsClient();
+    sprint.getSprints().then(res=>{
+        console.log(res);  
+        this.sprints=res;      
+       this.dataSource.data = res as GetSprintData[];        
+    });
+  }
+  
 }

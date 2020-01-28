@@ -9,6 +9,7 @@ import {FormsModule} from '@angular/forms';
 import {ReactiveFormsModule} from '@angular/forms';
 
 import {SprintComponent} from './Components/sprint/sprint.component';
+import { NavbarComponent } from './Components/navbar/navbar.component';
 import {IssueTrackerService} from './services/issue-tracker.service';
 
 import{MatCardModule,
@@ -17,13 +18,20 @@ import{MatCardModule,
   MatSidenavModule,
   MatTableModule,
   MatGridListModule,
-  MatToolbarModule}
+  MatToolbarModule,
+  MatSortModule}
    from '@angular/material';
+import { LayoutModule } from '@angular/cdk/layout';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { AddEditSprintComponent } from './Components/add-edit-sprint/add-edit-sprint.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SprintComponent
+    SprintComponent,
+    NavbarComponent,
+    AddEditSprintComponent
   ],
   imports: [
     BrowserModule,
@@ -38,9 +46,14 @@ import{MatCardModule,
     MatToolbarModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LayoutModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSortModule
   ],
   providers: [IssueTrackerService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports:[MatTableModule,MatSortModule]
 })
 export class AppModule { }

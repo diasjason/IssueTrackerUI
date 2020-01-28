@@ -1,0 +1,38 @@
+
+<mat-toolbar color="purple">    
+    <span>Add sprint</span>    
+    <span class="demo-toolbar"></span>       
+    
+</mat-toolbar>    
+    
+<mat-card>    
+    <!-- Title of an Card -->    
+    <mat-card-title>    
+        Angular Material Component With Angular 5    
+    </mat-card-title>    
+    
+    <mat-card-content>    
+        <form [formGroup]="sprintForm" (ngSubmit)="onSubmit()">    
+            <table>    
+                <tr>    
+                    <td>    
+                        <mat-form-field >    
+                            <input matInput placeholder="sprint Name" formControlName="sprintName" required>    
+                        </mat-form-field>    
+                    </td>    
+                    <td>    
+                        <mat-form-field class="demo-full-width">    
+                            <input matInput placeholder="sprintPoints" type="number" formControlName="sprintPoints" required>    
+                        </mat-form-field>    
+                    </td>    
+                </tr>                 
+                <tr>    
+                    <td colspan="2" class="content-center">    
+                        <button mat-raised-button color="accent" type="submit" [disabled]="!sprintForm.valid">Submit</button>    
+                        <button mat-raised-button color="accent">Clear</button>    
+                    </td>    
+                </tr>    
+            </table>    
+        </form>    
+    </mat-card-content>    
+  </mat-card>  
