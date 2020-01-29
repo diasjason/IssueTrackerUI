@@ -1,30 +1,41 @@
 import { Component, OnInit } from '@angular/core';
 import { SprintsClient, CreateSprintRequest}from 'src/app/services/issue-tracker.service';
-import { FormGroup, Validators ,FormBuilder} from '@angular/forms';
+import { FormGroup,FormControl, Validators ,FormBuilder} from '@angular/forms';
+import { Location } from '@angular/common';
 
 @Component({
-  selector: 'app-add-edit-sprint',
+  selector: 'add-edit-sprint',
   templateUrl: './add-edit-sprint.component.html',
   styleUrls: ['./add-edit-sprint.component.scss']
 })
 export class AddEditSprintComponent implements OnInit {
 
   sprintForm:FormGroup;
-  constructor(private fb:FormBuilder) { }
+  constructor(private location: Location,private fb:FormBuilder) { }
 
   ngOnInit() {
 
     this.sprintForm=this.fb.group({
       sprintName:['',[Validators.required,Validators.minLength(5)]],
       sprintPoints:['',Validators.required],
-      startDate:'2020/04/02',
-      EndDate:'2020/05/03',
+      startDate:'',
+      EndDate:[''],
       createdBy:'placi'
     }); 
   }
+
+  public hasError = (controlName: string, errorName: string) =>{
+    return this.sprintForm.controls[controlName].hasError(errorName);
+  }
+ 
+  public onCancel = () => {
+    this.location.back();
+  } 
   
   onSubmit(){
-    this.CreateSprint(this.sprintForm.value);
+    if(this.sprintForm.valid){
+        this.CreateSprint(this.sprintForm.value);
+    }
    }
  
    CreateSprint(formvalues){
@@ -35,6 +46,12 @@ export class AddEditSprintComponent implements OnInit {
        newSprint.sprintPoints = formvalues.sprintPoints;
        newSprint.startDate = new Date();
        newSprint.endDate = new Date();
-       sprint.postSprint(newSprint);
+       sprint.postSprint(newSprint).then(res=>{
+           console.log(res);
+         },err=>{
+           console.log(err);
+         }
+       );
    }
+
 }

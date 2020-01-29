@@ -1,38 +1,51 @@
 
-<mat-toolbar color="purple">    
+<!-- <mat-toolbar color="purple">    
     <span>Add sprint</span>    
     <span class="demo-toolbar"></span>       
     
-</mat-toolbar>    
-    
-<mat-card>    
-    <!-- Title of an Card -->    
-    <mat-card-title>    
-        Angular Material Component With Angular 5    
-    </mat-card-title>    
-    
-    <mat-card-content>    
-        <form [formGroup]="sprintForm" (ngSubmit)="onSubmit()">    
-            <table>    
-                <tr>    
-                    <td>    
-                        <mat-form-field >    
-                            <input matInput placeholder="sprint Name" formControlName="sprintName" required>    
-                        </mat-form-field>    
-                    </td>    
-                    <td>    
-                        <mat-form-field class="demo-full-width">    
-                            <input matInput placeholder="sprintPoints" type="number" formControlName="sprintPoints" required>    
-                        </mat-form-field>    
-                    </td>    
-                </tr>                 
-                <tr>    
-                    <td colspan="2" class="content-center">    
-                        <button mat-raised-button color="accent" type="submit" [disabled]="!sprintForm.valid">Submit</button>    
-                        <button mat-raised-button color="accent">Clear</button>    
-                    </td>    
-                </tr>    
-            </table>    
-        </form>    
-    </mat-card-content>    
-  </mat-card>  
+</mat-toolbar>     -->
+<section fxLayout="row wrap" fxLayoutAlign="center center">
+    <mat-card fxFlex="500px" fxFlex.xs="100%">    
+       <!-- Title of an Card -->    
+       <mat-card-title>    Add Sprint  </mat-card-title>
+                 
+        <form [formGroup]="sprintForm" autocomplete="off" novalidate (ngSubmit)="onSubmit()" fxLayout="column wrap"
+            fxLayoutAlign="center" fxLayoutGap="20px">
+           <mat-card-content>  
+              <mat-form-field>
+                <input matInput type="text" placeholder="SprintName" formControlName="sprintName" id="name">
+                <mat-hint align="end">Not less then 5 characters .</mat-hint>
+                <mat-error *ngIf="hasError('sprintName','required')">sprintName is required</mat-error>
+                <mat-error *ngIf="hasError('sprintName', 'minlength')">Please enter min 5 characters</mat-error>
+              </mat-form-field>
+
+              <mat-form-field>
+                <input matInput type="number" placeholder="Sprint Points" formControlName="sprintPoints">
+                <mat-hint align="end">Not more then 4 characters long.</mat-hint>
+                <mat-error *ngIf="hasError('sprintPoints', 'required')">SprintPoints are required</mat-error>
+              </mat-form-field> 
+
+              <mat-form-field>
+                <input matInput [matDatepicker]="picker" placeholder="Choose a StartDate" formControlName="startDate" id="startDate" 
+                    readonly (click)="picker.open()">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field>
+                <input matInput [matDatepicker]="endatepicker" placeholder="Choose a EndDate" formControlName="EndDate" id="EndDate" 
+                    readonly (click)="endatepicker.open()" >
+                <mat-datepicker-toggle matSuffix [for]="endatepicker"></mat-datepicker-toggle>
+                <mat-datepicker #endatepicker></mat-datepicker>
+              </mat-form-field>  
+
+           </mat-card-content>    
+  
+           <mat-card-actions align="center">
+             <button mat-raised-button color="primary" [disabled]="!sprintForm.valid">Create</button>
+             <button type="button" mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
+           </mat-card-actions>
+
+        </form>  
+     </mat-card>  
+</section>
