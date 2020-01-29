@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { SprintsClient, CreateSprintRequest}from 'src/app/services/issue-tracker.service';
+import { Component, OnInit, Inject, Optional } from '@angular/core';
+import { SprintsClient, CreateSprintRequest, GetSprintData}from 'src/app/services/issue-tracker.service';
 import { FormGroup,FormControl, Validators ,FormBuilder} from '@angular/forms';
 import { Location } from '@angular/common';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'add-edit-sprint',
@@ -11,17 +12,29 @@ import { Location } from '@angular/common';
 export class AddEditSprintComponent implements OnInit {
 
   sprintForm:FormGroup;
-  constructor(private location: Location,private fb:FormBuilder) { }
 
-  ngOnInit() {
+  constructor(private location: Location,private fb:FormBuilder,
+            public dialogRef: MatDialogRef<AddEditSprintComponent>,
+             @Inject(MAT_DIALOG_DATA)public data:any) 
+    {console.log(data,"ee"); }
 
+
+  ngOnInit() {   
+  console.log("sf");
     this.sprintForm=this.fb.group({
       sprintName:['',[Validators.required,Validators.minLength(5)]],
       sprintPoints:['',Validators.required],
       startDate:'',
-      EndDate:[''],
-      createdBy:'placi'
+      endDate:'',
+      createdBy:''
     }); 
+
+    let sprint:SprintsClient = new SprintsClient();
+    let sprintdata:GetSprintData;
+      sprint.getSprint(this.data.id).then(res=>{
+      console.log(res,"resed"); 
+       this.sprintForm.setValue(res);
+    });
   }
 
   public hasError = (controlName: string, errorName: string) =>{
@@ -29,8 +42,11 @@ export class AddEditSprintComponent implements OnInit {
   }
  
   public onCancel = () => {
-    this.location.back();
+   // this.location.back();
   } 
+  closeDialog(){ 
+    this.dialogRef.close(); 
+  }
   
   onSubmit(){
     if(this.sprintForm.valid){
@@ -48,8 +64,8 @@ export class AddEditSprintComponent implements OnInit {
        newSprint.endDate = new Date();
        sprint.postSprint(newSprint).then(res=>{
            console.log(res);
-         },err=>{
-           console.log(err);
+         },error=>{
+           console.log(error);
          }
        );
    }

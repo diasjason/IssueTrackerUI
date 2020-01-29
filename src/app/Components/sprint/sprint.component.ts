@@ -12,7 +12,7 @@ import { AddEditSprintComponent } from '../add-edit-sprint/add-edit-sprint.compo
   styleUrls: ['./sprint.component.scss']
 })
 export class SprintComponent implements OnInit ,AfterViewInit{
-   
+  
   public dataSource = new MatTableDataSource<GetSprintData>();
   public displayedColumns = ['sprintName','sprintPoints', 'startDate','endDate','details','update', 'delete'];
 
@@ -36,10 +36,27 @@ export class SprintComponent implements OnInit ,AfterViewInit{
   {
     let sprint:SprintsClient = new SprintsClient();
     sprint.getSprints().then(res=>{
-        console.log(res);       
+              
        this.dataSource.data = res as GetSprintData[];        
     });
+    
   }
+
+  public redirectToUpdatePage(id):void{
+    let sprint:SprintsClient = new SprintsClient();
+    // let sprintdata:GetSprintData;
+    // sprint.getSprint(id).then(res=>{
+    //   console.log(res,"res"); 
+    //    sprintdata=res;
+    // });
+    
+    const dialogConfig = new MatDialogConfig();
+     this.matDialog.open(AddEditSprintComponent,{ data:{id}});
+
+      //let updateUrl: string = `/AddEditSprints/${id}`;
+      //this.router.navigate([updateUrl]);
+  }
+
 
   openModal() {
     const dialogConfig = new MatDialogConfig();
@@ -48,8 +65,12 @@ export class SprintComponent implements OnInit ,AfterViewInit{
     dialogConfig.id = "add-edit-sprint";
     dialogConfig.height = "400px";
     dialogConfig.width = "600px";
+    
     // https://material.angular.io/components/dialog/overview
 
     const modalDialog = this.matDialog.open(AddEditSprintComponent, dialogConfig);
+
+   
   }
+ 
 }

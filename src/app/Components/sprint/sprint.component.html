@@ -41,7 +41,7 @@
     <ng-container matColumnDef="update">
         <th mat-header-cell *matHeaderCellDef> Update </th>
         <td mat-cell *matCellDef="let element">
-          <button mat-icon-button color="accent" (click)="(element.sprintId)">
+          <button mat-icon-button color="accent" (click)="redirectToUpdatePage(element.sprintId)">
               <mat-icon class="mat-18">system_update</mat-icon>
           </button>
         </td>
@@ -61,7 +61,7 @@
     
   </table>
 
-  <mat-paginator [pageSize]="2" >
+  <mat-paginator [pageSize]="5" >
   </mat-paginator>
  
   <button mat-raised-button id="logout-button" (click)="openModal()">Create Sprint</button>
