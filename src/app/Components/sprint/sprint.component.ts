@@ -4,6 +4,7 @@ import { FormGroup, Validators ,FormBuilder} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource, MatSort,MatPaginator, MatDialogConfig, MatDialog } from '@angular/material';
 import { AddEditSprintComponent } from '../add-edit-sprint/add-edit-sprint.component';
+import { AESprintComponent } from '../aesprint/aesprint.component';
 // import {CdkDragDrop, moveItemInArray, transferArrayItem, CdkDragHandle} from '@angular/cdk/drag-drop';
 
 @Component({
@@ -42,35 +43,23 @@ export class SprintComponent implements OnInit ,AfterViewInit{
     
   }
 
-  public redirectToUpdatePage(id):void{
-    let sprint:SprintsClient = new SprintsClient();
-    // let sprintdata:GetSprintData;
-    // sprint.getSprint(id).then(res=>{
-    //   console.log(res,"res"); 
-    //    sprintdata=res;
-    // });
-    
+  public redirectToUpdatePage(id):void{     
     const dialogConfig = new MatDialogConfig();
-     this.matDialog.open(AddEditSprintComponent,{ data:{id}});
-
-      //let updateUrl: string = `/AddEditSprints/${id}`;
-      //this.router.navigate([updateUrl]);
+    this.matDialog.open(AESprintComponent,{ data:{id}});    
   }
 
 
   openModal() {
     const dialogConfig = new MatDialogConfig();
-    // The user can't close the dialog by clicking outside its body
-    //dialogConfig.disableClose = true;
-    dialogConfig.id = "add-edit-sprint";
-    dialogConfig.height = "400px";
-    dialogConfig.width = "600px";
-    
+    // The user can't close the dialog by clicking outside its body   
+    //dialogConfig.id = "add-edit-sprint";
+    //dialogConfig.height = "400px";
+    //dialogConfig.width = "600px";    
     // https://material.angular.io/components/dialog/overview
-
-    const modalDialog = this.matDialog.open(AddEditSprintComponent, dialogConfig);
+    //const modalDialog = this.matDialog.open(AddEditSprintComponent, dialogConfig);
 
    
+    this.matDialog.open(AESprintComponent,{ data:{id:0}});  
   }
  
 }

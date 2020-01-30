@@ -30,13 +30,15 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AddEditSprintComponent } from './Components/add-edit-sprint/add-edit-sprint.component';
+import { AESprintComponent } from './Components/aesprint/aesprint.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SprintComponent,
     NavbarComponent,
-    AddEditSprintComponent
+    AddEditSprintComponent,
+    AESprintComponent
   ],
   imports: [
     BrowserModule,
@@ -64,6 +66,7 @@ import { AddEditSprintComponent } from './Components/add-edit-sprint/add-edit-sp
   ],
   providers: [IssueTrackerService],
   bootstrap: [AppComponent],
-  exports:[MatTableModule,MatSortModule,MatPaginatorModule]
+  exports:[MatTableModule,MatSortModule,MatPaginatorModule],
+  entryComponents:[AESprintComponent]
 })
 export class AppModule { }

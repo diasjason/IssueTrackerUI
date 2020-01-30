@@ -1,0 +1,113 @@
+
+import { Component, OnInit, Inject, Optional } from '@angular/core';
+import { SprintsClient, CreateSprintRequest, GetSprintData, EditSprintRequest}from 'src/app/services/issue-tracker.service';
+import { FormGroup,FormControl, Validators ,FormBuilder} from '@angular/forms';
+import { Location } from '@angular/common';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { ActivatedRoute, Params } from '@angular/router';
+
+@Component({
+  selector: 'app-aesprint',
+  templateUrl: './aesprint.component.html',
+  styleUrls: ['./aesprint.component.scss']
+})
+export class AESprintComponent implements OnInit {
+  sprintId:string='';
+  editMode = false;
+  //pageTitle: string;
+  //buttonText: string;
+  sprintForm:FormGroup;
+  AddButton=true;
+  sprint:SprintsClient = new SprintsClient(); 
+
+  constructor(private location: Location,private fb:FormBuilder,
+            public dialogRef: MatDialogRef<AESprintComponent>,
+             @Inject(MAT_DIALOG_DATA)public data:any,private route:ActivatedRoute)  { }
+
+
+  ngOnInit() {   
+
+    this.createForm();
+    this.sprintId=this.data.id?this.data.id:''
+    this.editMode=this.data.id!=0;
+    this.initForm();
+    //this.pageTitle=this.editMode?'Edit Sprint':'Add Sprint';
+  }
+
+  createForm()
+  {
+    this.sprintForm=this.fb.group({
+      sprintName:['',[Validators.required,Validators.minLength(5)]],
+      sprintPoints:['',Validators.required],
+      startDate:'',
+      endDate:'',
+      createdBy:'',
+      sprintId:this.sprintId?this.sprintId:''
+    });     
+  }
+  private initForm()
+  {
+    if(this.editMode){  
+       this.sprint.getSprint(this.data.id).then(res=>{      
+         this.sprintForm.setValue(res);
+      });
+      this.AddButton=false;
+   }
+  }
+
+  public hasError = (controlName: string, errorName: string) =>{
+    return this.sprintForm.controls[controlName].hasError(errorName);
+  }
+  
+  closeDialog(){ 
+    this.dialogRef.close(); 
+  }
+  
+  onSubmit(){
+    if(this.sprintForm.valid){
+      if(!this.editMode){        
+      this.createSprint(this.sprintForm.value);
+      }else{
+      this.updateSprint(this.sprintForm.value);
+      } 
+    }
+   }
+ 
+   createSprint(formvalues){    
+       let newSprint: CreateSprintRequest = new CreateSprintRequest();
+       newSprint.sprintName = formvalues.sprintName;
+       newSprint.sprintPoints = formvalues.sprintPoints;
+       newSprint.startDate = new Date();
+       newSprint.endDate = new Date();
+       this.sprint.postSprint(newSprint).then(res=>{
+           console.log(res);
+         },error=>{
+           console.log(error);
+         }
+       );
+       this.dialogRef.close();
+       this.ngOnInit();
+   }
+
+   updateSprint(formvalues)
+   {
+      console.log(formvalues,"update");
+      
+      let updateSprint: EditSprintRequest = new EditSprintRequest();      
+      updateSprint.sprintName = formvalues.sprintName;
+      updateSprint.sprintPoints = formvalues.sprintPoints;
+      updateSprint.startDate = new Date();
+      updateSprint.endDate = new Date();
+      updateSprint.sprintId=parseInt(this.sprintId);
+      updateSprint.sprintStatusId=1;
+
+      this.sprint.putSprint(updateSprint).then(res=>{
+          console.log(res);
+        },error=>{
+          console.log(error);
+        }
+      );
+      this.dialogRef.close();
+   }
+
+}
