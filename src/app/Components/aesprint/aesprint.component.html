@@ -37,10 +37,33 @@
                     readonly (click)="endatepicker.open()" >
                 <mat-datepicker-toggle matSuffix [for]="endatepicker"></mat-datepicker-toggle>
                 <mat-datepicker #endatepicker></mat-datepicker>
-              </mat-form-field>  
+              </mat-form-field> 
 
+              <!-- <mat-form-field>
+                <mat-select matInput placeholder="Sprint Status" formControlName="sprintStatusId" name="sprintStatus">
+                  <mat-option *ngFor="let status of SprintStatus" [value]="Status.sprintStatusId">
+                    {{ status.SprintStatusName }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field> -->
+              <!-- <mat-form-field>
+                <mat-label>Sprint Status</mat-label>
+                <select matNativeControl formControlName="sprintStatusId" name="car">
+                  <option value="1" selected></option>
+                  <option *ngFor="let status of SprintStatus" [value]="Status.sprintStatusId">
+                    {{status.SprintStatusName}}
+                  </option>
+                </select>
+              </mat-form-field> -->
                 <!-- <input  type="number" formControlName="sprintId" id="sprintId" hidden> -->
-                
+                <mat-form-field>
+                    <mat-label>Select an option</mat-label>
+                    <mat-select [(value)]="selected"  formControlName="sprintStatusId">
+                        <mat-option *ngFor="let status of SprintStatus" [value]="status.SprintStatusId">
+                            {{ status.SprintStatusName }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
            </mat-dialog-content>    
   
            <mat-dialog-actions align="center">

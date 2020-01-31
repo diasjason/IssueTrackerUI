@@ -1168,6 +1168,7 @@ export class Sprint implements ISprint {
   startDate!: Date;
   endDate!: Date;
   createdBy?: string | undefined;
+  sprintStatusId!:number;
 
   constructor(data?: ISprint) {
       if (data) {
@@ -1185,6 +1186,7 @@ export class Sprint implements ISprint {
           this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
           this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
           this.createdBy = _data["createdBy"];
+          this.sprintStatusId=_data["sprintStatusId"];
       }
   }
 
@@ -1201,7 +1203,8 @@ export class Sprint implements ISprint {
       data["sprintPoints"] = this.sprintPoints;
       data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
       data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
-      data["createdBy"] = this.createdBy;
+      data["createdBy"] = this.createdBy;      
+      data["sprintStatusId"]=this.sprintStatusId;
       return data; 
   }
 }
@@ -1212,6 +1215,7 @@ export interface ISprint {
   startDate: Date;
   endDate: Date;
   createdBy?: string | undefined;
+  sprintStatusId:number;
 }
 
 export class GetSprintData extends Sprint implements IGetSprintData {

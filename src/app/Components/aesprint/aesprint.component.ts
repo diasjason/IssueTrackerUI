@@ -32,23 +32,30 @@ export class AESprintComponent implements OnInit {
     this.editMode=this.data.id!=0;
     this.initForm();
     //this.pageTitle=this.editMode?'Edit Sprint':'Add Sprint';
+   
   }
-
+  //dynamically bind sprint status dropdown here
+   SprintStatus = [
+    {SprintStatusId: 1,SprintStatusName: 'Steak'},
+    {SprintStatusId: 2,SprintStatusName: 'Pizza'},
+    {SprintStatusId: 3,SprintStatusName: 'Tacos'}
+  ];
   createForm()
   {
-    this.sprintForm=this.fb.group({
+    this.sprintForm=this.fb.group({      
+      sprintId:this.sprintId?this.sprintId:'',
       sprintName:['',[Validators.required,Validators.minLength(5)]],
       sprintPoints:['',Validators.required],
       startDate:'',
       endDate:'',
       createdBy:'',
-      sprintId:this.sprintId?this.sprintId:''
+      sprintStatusId:['']
     });     
   }
   private initForm()
   {
     if(this.editMode){  
-       this.sprint.getSprint(this.data.id).then(res=>{      
+       this.sprint.getSprint(this.data.id).then(res=>{   
          this.sprintForm.setValue(res);
       });
       this.AddButton=false;
@@ -65,10 +72,11 @@ export class AESprintComponent implements OnInit {
   
   onSubmit(){
     if(this.sprintForm.valid){
-      if(!this.editMode){        
-      this.createSprint(this.sprintForm.value);
+      if(!this.editMode){   
+        console.log(this.sprintForm.value);     
+        this.createSprint(this.sprintForm.value);
       }else{
-      this.updateSprint(this.sprintForm.value);
+        this.updateSprint(this.sprintForm.value);
       } 
     }
    }
@@ -77,8 +85,9 @@ export class AESprintComponent implements OnInit {
        let newSprint: CreateSprintRequest = new CreateSprintRequest();
        newSprint.sprintName = formvalues.sprintName;
        newSprint.sprintPoints = formvalues.sprintPoints;
-       newSprint.startDate = new Date();
-       newSprint.endDate = new Date();
+       newSprint.startDate =formvalues.startDate;
+       newSprint.endDate = formvalues.endDate;
+       newSprint.sprintStatusId=formvalues.sprintStatusId;
        this.sprint.postSprint(newSprint).then(res=>{
            console.log(res);
          },error=>{
@@ -96,10 +105,10 @@ export class AESprintComponent implements OnInit {
       let updateSprint: EditSprintRequest = new EditSprintRequest();      
       updateSprint.sprintName = formvalues.sprintName;
       updateSprint.sprintPoints = formvalues.sprintPoints;
-      updateSprint.startDate = new Date();
-      updateSprint.endDate = new Date();
+      updateSprint.startDate = formvalues.startDate;
+      updateSprint.endDate = formvalues.endDate;
       updateSprint.sprintId=parseInt(this.sprintId);
-      updateSprint.sprintStatusId=1;
+      updateSprint.sprintStatusId=formvalues.sprintStatusId;
 
       this.sprint.putSprint(updateSprint).then(res=>{
           console.log(res);
@@ -110,4 +119,5 @@ export class AESprintComponent implements OnInit {
       this.dialogRef.close();
    }
 
+   
 }

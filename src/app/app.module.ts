@@ -23,7 +23,8 @@ import{MatCardModule,
   MatPaginatorModule,
   MatDatepickerModule, 
   MatNativeDateModule,
-  MatDialogModule}
+  MatDialogModule,
+  MatSelectModule}
    from '@angular/material';
 import { LayoutModule } from '@angular/cdk/layout';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -62,7 +63,8 @@ import { AESprintComponent } from './Components/aesprint/aesprint.component';
     MatPaginatorModule,    
     MatDatepickerModule, 
     MatNativeDateModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSelectModule
   ],
   providers: [IssueTrackerService],
   bootstrap: [AppComponent],
