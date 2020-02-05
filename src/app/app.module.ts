@@ -32,6 +32,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AddEditSprintComponent } from './Components/add-edit-sprint/add-edit-sprint.component';
 import { AESprintComponent } from './Components/aesprint/aesprint.component';
+import { AddEditReleaseComponent } from './Components/add-edit-release/add-edit-release.component';
+import { ReusableModalComponent } from './Components/reusable-modal/reusable-modal.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,9 @@ import { AESprintComponent } from './Components/aesprint/aesprint.component';
     SprintComponent,
     NavbarComponent,
     AddEditSprintComponent,
-    AESprintComponent
+    AESprintComponent,
+    AddEditReleaseComponent,
+    ReusableModalComponent
   ],
   imports: [
     BrowserModule,
@@ -69,6 +73,6 @@ import { AESprintComponent } from './Components/aesprint/aesprint.component';
   providers: [IssueTrackerService],
   bootstrap: [AppComponent],
   exports:[MatTableModule,MatSortModule,MatPaginatorModule],
-  entryComponents:[AESprintComponent]
+  entryComponents:[AESprintComponent,ReusableModalComponent]
 })
 export class AppModule { }

@@ -1,6 +1,6 @@
 
 import { Component, OnInit, Inject, Optional } from '@angular/core';
-import { SprintsClient, CreateSprintRequest, GetSprintData, EditSprintRequest}from 'src/app/services/issue-tracker.service';
+import { SprintsClient, CreateSprintRequest, GetSprintData, EditSprintRequest, GetSprintStatusData}from 'src/app/services/issue-tracker.service';
 import { FormGroup,FormControl, Validators ,FormBuilder} from '@angular/forms';
 import { Location } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
@@ -19,6 +19,7 @@ export class AESprintComponent implements OnInit {
   sprintForm:FormGroup;
   AddButton=true;
   sprint:SprintsClient = new SprintsClient(); 
+  public SprintStatus;
 
   constructor(private location: Location,private fb:FormBuilder,
             public dialogRef: MatDialogRef<AESprintComponent>,
@@ -26,20 +27,18 @@ export class AESprintComponent implements OnInit {
 
 
   ngOnInit() {   
-
     this.createForm();
     this.sprintId=this.data.id?this.data.id:''
     this.editMode=this.data.id!=0;
     this.initForm();
-    //this.pageTitle=this.editMode?'Edit Sprint':'Add Sprint';
-   
+    //this.pageTitle=this.editMode?'Edit Sprint':'Add Sprint';  
   }
+
   //dynamically bind sprint status dropdown here
-   SprintStatus = [
-    {SprintStatusId: 1,SprintStatusName: 'Steak'},
-    {SprintStatusId: 2,SprintStatusName: 'Pizza'},
-    {SprintStatusId: 3,SprintStatusName: 'Tacos'}
-  ];
+  sprintStatuslist= this.sprint.getSprintStatusList().then(res=>{
+    this.SprintStatus=res as GetSprintStatusData[];   
+  });
+
   createForm()
   {
     this.sprintForm=this.fb.group({      
