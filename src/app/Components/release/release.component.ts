@@ -1,22 +1,21 @@
 import { Component, OnInit,ViewChild, AfterViewInit } from '@angular/core';
-import { SprintsClient, CreateSprintRequest, GetSprintData, Sprint}from 'src/app/services/issue-tracker.service';
+import { CreateReleaseRequest, GetReleaseData, Release, ReleasesClient}from 'src/app/services/issue-tracker.service';
 import { FormGroup, Validators ,FormBuilder} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource, MatSort,MatPaginator, MatDialogConfig, MatDialog } from '@angular/material';
-//import { AddEditSprintComponent } from '../add-edit-sprint/add-edit-sprint.component';
-import { AddEditSprintComponent } from '../add-edit-sprint/add-edit-sprint.component';
+import { AddEditReleaseComponent } from '../add-edit-release/add-edit-release.component';
 import { ReusableModalComponent } from '../reusable-modal/reusable-modal.component';
 
 @Component({
-  selector: 'app-sprint',
-  templateUrl: './sprint.component.html',
-  styleUrls: ['./sprint.component.scss']
+  selector: 'app-release',
+  templateUrl: './release.component.html',
+  styleUrls: ['./release.component.scss']
 })
-export class SprintComponent implements OnInit ,AfterViewInit{
-  
-  public dataSource = new MatTableDataSource<GetSprintData>();
-  public displayedColumns = ['sprintName','sprintPoints', 'startDate','endDate','details','update', 'delete'];
-  sprint:SprintsClient = new SprintsClient();
+export class ReleaseComponent implements OnInit {
+
+  public dataSource = new MatTableDataSource<GetReleaseData>();
+  public displayedColumns = ['releaseName', 'startDate','endDate','details','update', 'delete'];
+  release:ReleasesClient = new ReleasesClient();
 
    @ViewChild(MatSort,{static:false}) sort: MatSort;
    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;   
@@ -26,7 +25,7 @@ export class SprintComponent implements OnInit ,AfterViewInit{
    }
 
   ngOnInit() {   
-      this.getSprintList();
+      this.getReleaseList();
   }
 
   ngAfterViewInit(): void {
@@ -34,18 +33,18 @@ export class SprintComponent implements OnInit ,AfterViewInit{
     this.dataSource.paginator = this.paginator;
   }
   
-  getSprintList()
+  getReleaseList()
   {
     //let sprint:SprintsClient = new SprintsClient();
-    this.sprint.getSprints().then(res=>{              
-       this.dataSource.data = res as GetSprintData[];        
+    this.release.getReleaseList().then(res=>{              
+       this.dataSource.data = res as GetReleaseData[];        
     });
     
   }
 
   public redirectToUpdatePage(id):void{     
     const dialogConfig = new MatDialogConfig();
-    this.matDialog.open(AddEditSprintComponent,{ data:{id}});    
+    this.matDialog.open(AddEditReleaseComponent,{ data:{id}});    
   }
 
   public redirectToDelete(id):void  {
@@ -54,7 +53,7 @@ export class SprintComponent implements OnInit ,AfterViewInit{
 
   openModal() {
     const dialogConfig = new MatDialogConfig();   
-    this.matDialog.open(AddEditSprintComponent,{ data:{id:0}});  
+    this.matDialog.open(AddEditReleaseComponent,{ data:{id:0}});  
   }
  
   openCofirmationModal(id) {
@@ -62,8 +61,8 @@ export class SprintComponent implements OnInit ,AfterViewInit{
     // The user can't close the dialog by clicking outside its body
     dialogConfig.disableClose = true;
     dialogConfig.id = "modal-component";
-    dialogConfig.height = "350px";
-    dialogConfig.width = "600px";
+    dialogConfig.height = "300px";
+    dialogConfig.width = "400px";
     dialogConfig.data = {
       name: "Delete",
       title: "Are you sure you want to Delete?",
@@ -75,3 +74,4 @@ export class SprintComponent implements OnInit ,AfterViewInit{
     const modalDialog = this.matDialog.open(ReusableModalComponent, dialogConfig);
   }
 }
+

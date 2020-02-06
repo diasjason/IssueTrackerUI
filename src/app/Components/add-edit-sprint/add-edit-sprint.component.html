@@ -7,11 +7,11 @@
 <section fxLayout="row wrap" fxLayoutAlign="center center">
     <mat-card fxFlex="500px" fxFlex.xs="100%">    
        <!-- Title of an Card -->    
-       <mat-card-title>    Add Sprint  </mat-card-title>
+       <title mat-dialog-title >    AE Sprint  </title>
                  
         <form [formGroup]="sprintForm" autocomplete="off" novalidate (ngSubmit)="onSubmit()" fxLayout="column wrap"
             fxLayoutAlign="center" fxLayoutGap="20px">
-           <mat-card-content>  
+           <mat-dialog-content>  
               <mat-form-field>
                 <input matInput type="text" placeholder="SprintName" formControlName="sprintName" id="name">
                 <mat-hint align="end">Not less then 5 characters .</mat-hint>
@@ -37,15 +37,47 @@
                     readonly (click)="endatepicker.open()" >
                 <mat-datepicker-toggle matSuffix [for]="endatepicker"></mat-datepicker-toggle>
                 <mat-datepicker #endatepicker></mat-datepicker>
-              </mat-form-field>  
+              </mat-form-field> 
 
-           </mat-card-content>    
+              <!-- <mat-form-field>
+                <mat-select matInput placeholder="Sprint Status" formControlName="sprintStatusId" name="sprintStatus">
+                  <mat-option *ngFor="let status of SprintStatus" [value]="Status.sprintStatusId">
+                    {{ status.SprintStatusName }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field> -->
+              <!-- <mat-form-field>
+                <mat-label>Sprint Status</mat-label>
+                <select matNativeControl formControlName="sprintStatusId" name="car">
+                  <option value="1" selected></option>
+                  <option *ngFor="let status of SprintStatus" [value]="Status.sprintStatusId">
+                    {{status.SprintStatusName}}
+                  </option>
+                </select>
+              </mat-form-field> -->
+                <!-- <input  type="number" formControlName="sprintId" id="sprintId" hidden> -->
+                <mat-form-field>
+                    <mat-label>Select an option</mat-label>
+                    <mat-select [(value)]="selected"  formControlName="sprintStatusId">
+                        <mat-option *ngFor="let status of SprintStatus" [value]="status.sprintStatusId">
+                            {{ status.sprintStatusName }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+           </mat-dialog-content>    
   
-           <mat-card-actions align="center">
+           <mat-dialog-actions align="center">
+               
+             <div *ngIf="AddButton; else EditButton">
              <button mat-raised-button color="primary" [disabled]="!sprintForm.valid">Create</button>
+            </div>
+            <ng-template #EditButton>
+              <button mat-raised-button color="primary" >Edit</button>
+            </ng-template>
              <button type="button" mat-raised-button color="warn" (click)="closeDialog()">Close</button>
-           </mat-card-actions>
+           </mat-dialog-actions>
 
         </form>  
-     </mat-card>  
+        
+    </mat-card>  
 </section>

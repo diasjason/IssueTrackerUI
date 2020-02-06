@@ -1,0 +1,62 @@
+
+<!-- code for adding sprint -->
+<!-- Main Toolbar of an App -->    
+<mat-toolbar color="purple">    
+    <span> Release List</span>    
+    <span class="demo-toolbar"></span>       
+    
+  </mat-toolbar>    
+  
+  
+    <table mat-table [dataSource]="dataSource" matSort    >
+      <ng-container matColumnDef="releaseName">
+        <th mat-header-cell *matHeaderCellDef > ReleaseName </th>
+        <td mat-cell *matCellDef="let element"> {{element.releaseName}} </td>
+      </ng-container>
+     
+      <ng-container matColumnDef="startDate" >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> StartDate </th>
+        <td mat-cell *matCellDef="let element"> {{element.startDate | date}} </td>
+      </ng-container>
+     
+      <ng-container matColumnDef="endDate">
+        <th mat-header-cell *matHeaderCellDef> EndDate </th>
+        <td mat-cell *matCellDef="let element"> {{element.endDate|date}} </td>
+      </ng-container>
+      
+      <ng-container matColumnDef="details">
+        <th mat-header-cell *matHeaderCellDef> Details </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="primary" (click)="redirectToDetails(element.id)">
+              <mat-icon class="mat-18">reorder</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+     
+      <ng-container matColumnDef="update">
+          <th mat-header-cell *matHeaderCellDef> Update </th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button color="accent" (click)="redirectToUpdatePage(element.releaseId)">
+                <mat-icon class="mat-18">system_update</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+     
+        <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef> Delete </th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button color="warn" (click)="redirectToDelete(element.releaseId)">
+                  <mat-icon class="mat-18">delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+     
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
+      
+    </table>
+  
+    <mat-paginator [pageSize]="5" >
+    </mat-paginator>
+   
+    <button mat-raised-button id="logout-button" (click)="openModal()">Create Release</button>

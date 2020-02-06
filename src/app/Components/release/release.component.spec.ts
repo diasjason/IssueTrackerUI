@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AESprintComponent } from './aesprint.component';
+import { ReleaseComponent } from './release.component';
 
-describe('AESprintComponent', () => {
-  let component: AESprintComponent;
-  let fixture: ComponentFixture<AESprintComponent>;
+describe('ReleaseComponent', () => {
+  let component: ReleaseComponent;
+  let fixture: ComponentFixture<ReleaseComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AESprintComponent ]
+      declarations: [ ReleaseComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AESprintComponent);
+    fixture = TestBed.createComponent(ReleaseComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
