@@ -68,7 +68,7 @@ export class ReleaseComponent implements OnInit {
       title: "Are you sure you want to Delete?",
     //  description: "Pretend this is a convincing argument on why you shouldn't logout :)",
       actionButtonText: "Delete",
-      SprintId:id
+      ReleaseId:id
     }
     // https://material.angular.io/components/dialog/overview
     const modalDialog = this.matDialog.open(ReusableModalComponent, dialogConfig);
