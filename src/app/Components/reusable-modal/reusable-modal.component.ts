@@ -12,7 +12,7 @@ export class ReusableModalComponent implements OnInit {
   sprint:SprintsClient = new SprintsClient();
   
   constructor(  public dialogRef: MatDialogRef<ReusableModalComponent>,
-    @Inject(MAT_DIALOG_DATA) private modalData: any
+    @Inject(MAT_DIALOG_DATA) public modalData: any
     ) { }
 
   ngOnInit() {

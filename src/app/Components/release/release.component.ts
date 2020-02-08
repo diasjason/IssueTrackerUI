@@ -50,6 +50,7 @@ export class ReleaseComponent implements OnInit {
   public redirectToDelete(id):void  {
     this.openCofirmationModal(id);
   }
+  public redirectToDetails(id):void{}
 
   openModal() {
     const dialogConfig = new MatDialogConfig();   
@@ -61,7 +62,7 @@ export class ReleaseComponent implements OnInit {
     // The user can't close the dialog by clicking outside its body
     dialogConfig.disableClose = true;
     dialogConfig.id = "modal-component";
-    dialogConfig.height = "300px";
+    dialogConfig.height = "150px";
     dialogConfig.width = "400px";
     dialogConfig.data = {
       name: "Delete",

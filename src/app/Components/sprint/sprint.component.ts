@@ -47,6 +47,7 @@ export class SprintComponent implements OnInit ,AfterViewInit{
     const dialogConfig = new MatDialogConfig();
     this.matDialog.open(AddEditSprintComponent,{ data:{id}});    
   }
+  public redirectToDetails(id):void{}
 
   public redirectToDelete(id):void  {
     this.openCofirmationModal(id);
