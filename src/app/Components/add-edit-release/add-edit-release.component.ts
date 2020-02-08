@@ -49,7 +49,8 @@ export class AddEditReleaseComponent implements OnInit {
   private initForm()
   {
     if(this.editMode){  
-       this.release.getRelease(this.data.id).then(res=>{   
+       this.release.getRelease(this.data.id).then(res=>{
+         console.log(res);   
          this.releaseForm.setValue(res);
       });
       this.AddButton=false;

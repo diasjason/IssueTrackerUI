@@ -60,10 +60,10 @@ export class SprintComponent implements OnInit ,AfterViewInit{
   openCofirmationModal(id) {
     const dialogConfig = new MatDialogConfig();
     // The user can't close the dialog by clicking outside its body
-    dialogConfig.disableClose = true;
+   // dialogConfig.disableClose = false;
     dialogConfig.id = "modal-component";
-    dialogConfig.height = "350px";
-    dialogConfig.width = "600px";
+    dialogConfig.height = "150px";
+    dialogConfig.width = "400px";
     dialogConfig.data = {
       name: "Delete",
       title: "Are you sure you want to Delete?",

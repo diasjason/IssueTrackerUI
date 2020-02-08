@@ -1,10 +1,10 @@
 
-<div id="modal-content-wrapper">
+<!-- <div id="modal-content-wrapper">
     <header id="modal-header">
         <h1 id="modal-title">{{ modalData.title }}</h1>
     </header>
     <section id="modal-body">
-        <!-- <p>{{ modalData.description }}</p> -->
+        <p>{{ modalData.description }}</p>
     </section>
     <footer id="modal-footer">
         <button mat-raised-button id="modal-action-button" (click)="actionFunction()">
@@ -14,4 +14,16 @@
             Cancel 
         </button>
     </footer>
-</div>
+</div> -->
+<section>
+        <h1 mat-dialog-title></h1>
+        <div mat-dialog-content>{{modalData.title }}</div>
+        <div mat-dialog-actions>            
+            <button mat-raised-button id="modal-action-button" color="warn" (click)="actionFunction()">
+                {{ modalData.actionButtonText }}
+            </button>
+            <button type="button" mat-raised-button  color="primary" (click)="closeModal()">
+                Cancel
+            </button>
+        </div>   
+</section>

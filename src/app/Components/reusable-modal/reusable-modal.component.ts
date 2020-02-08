@@ -23,6 +23,9 @@ export class ReusableModalComponent implements OnInit {
     this.sprint.deleteSprint(this.sprintId);
     this.closeModal();
   }
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 
   closeModal() {
     this.dialogRef.close();
