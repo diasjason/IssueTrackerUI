@@ -21,8 +21,7 @@ export class ReleaseComponent implements OnInit {
    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;   
 
   constructor(private route:ActivatedRoute,private router:Router,private matDialog:MatDialog)
-   { 
-   }
+   {    }
 
   ngOnInit() {   
       this.getReleaseList();
@@ -33,13 +32,10 @@ export class ReleaseComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
   
-  getReleaseList()
-  {
-    //let sprint:SprintsClient = new SprintsClient();
+  getReleaseList() {
     this.release.getReleaseList().then(res=>{              
        this.dataSource.data = res as GetReleaseData[];        
-    });
-    
+    });    
   }
 
   public redirectToUpdatePage(id):void{     
@@ -59,7 +55,6 @@ export class ReleaseComponent implements OnInit {
  
   openCofirmationModal(id) {
     const dialogConfig = new MatDialogConfig();
-    // The user can't close the dialog by clicking outside its body
     dialogConfig.disableClose = true;
     dialogConfig.id = "modal-component";
     dialogConfig.height = "150px";
@@ -67,11 +62,9 @@ export class ReleaseComponent implements OnInit {
     dialogConfig.data = {
       name: "Delete",
       title: "Are you sure you want to Delete?",
-    //  description: "Pretend this is a convincing argument on why you shouldn't logout :)",
       actionButtonText: "Delete",
       ReleaseId:id
     }
-    // https://material.angular.io/components/dialog/overview
     const modalDialog = this.matDialog.open(ReusableModalComponent, dialogConfig);
   }
 }

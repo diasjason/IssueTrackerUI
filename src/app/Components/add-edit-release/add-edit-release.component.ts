@@ -89,7 +89,6 @@ export class AddEditReleaseComponent implements OnInit {
          }
        );
        this.dialogRef.close();
-       this.ngOnInit();
    }
 
    updateRelease(formvalues)

@@ -1,26 +1,8 @@
-#modal-content-wrapper {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    color: rgb(43, 35, 87);
-}
-
-#modal-title {
-    font-size: 22px;
-}
-
-#modal-footer {
-    justify-self: right;
-    align-self: center;
-}
 
 #modal-action-button {
     margin-right: 50px;
-   // background-color:#3b3b3b;
-   // color: warn;
 }
 
 #modal-cancel-button {
-   // background-color: #4e4e4e;
     color: white;
 }

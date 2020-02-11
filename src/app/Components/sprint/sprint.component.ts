@@ -3,7 +3,6 @@ import { SprintsClient, CreateSprintRequest, GetSprintData, Sprint}from 'src/app
 import { FormGroup, Validators ,FormBuilder} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource, MatSort,MatPaginator, MatDialogConfig, MatDialog } from '@angular/material';
-//import { AddEditSprintComponent } from '../add-edit-sprint/add-edit-sprint.component';
 import { AddEditSprintComponent } from '../add-edit-sprint/add-edit-sprint.component';
 import { ReusableModalComponent } from '../reusable-modal/reusable-modal.component';
 
@@ -34,20 +33,18 @@ export class SprintComponent implements OnInit ,AfterViewInit{
     this.dataSource.paginator = this.paginator;
   }
   
-  getSprintList()
-  {
-    //let sprint:SprintsClient = new SprintsClient();
+  getSprintList()  {
     this.sprint.getSprints().then(res=>{              
        this.dataSource.data = res as GetSprintData[];        
-    });
-    
+    });    
   }
 
   public redirectToUpdatePage(id):void{     
     const dialogConfig = new MatDialogConfig();
     this.matDialog.open(AddEditSprintComponent,{ data:{id}});    
   }
-  public redirectToDetails(id):void{}
+  public redirectToDetails(id):void{    
+  }
 
   public redirectToDelete(id):void  {
     this.openCofirmationModal(id);
@@ -60,7 +57,6 @@ export class SprintComponent implements OnInit ,AfterViewInit{
  
   openCofirmationModal(id) {
     const dialogConfig = new MatDialogConfig();
-    // The user can't close the dialog by clicking outside its body
    // dialogConfig.disableClose = false;
     dialogConfig.id = "modal-component";
     dialogConfig.height = "150px";
@@ -68,11 +64,9 @@ export class SprintComponent implements OnInit ,AfterViewInit{
     dialogConfig.data = {
       name: "Delete",
       title: "Are you sure you want to Delete?",
-    //  description: "Pretend this is a convincing argument on why you shouldn't logout :)",
       actionButtonText: "Delete",
       SprintId:id
     }
-    // https://material.angular.io/components/dialog/overview
     const modalDialog = this.matDialog.open(ReusableModalComponent, dialogConfig);
   }
 }

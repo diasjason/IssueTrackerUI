@@ -14,8 +14,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 export class AddEditSprintComponent implements OnInit {
   sprintId:string='';
   editMode = false;
-  //pageTitle: string;
-  //buttonText: string;
+  pageTitle: string;
   sprintForm:FormGroup;
   AddButton=true;
   sprint:SprintsClient = new SprintsClient(); 
@@ -31,10 +30,9 @@ export class AddEditSprintComponent implements OnInit {
     this.sprintId=this.data.id?this.data.id:''
     this.editMode=this.data.id!=0;
     this.initForm();
-    //this.pageTitle=this.editMode?'Edit Sprint':'Add Sprint';  
+    this.pageTitle=this.editMode?'Edit Sprint':'Add Sprint';  
   }
 
-  //dynamically bind sprint status dropdown here
   sprintStatuslist= this.sprint.getSprintStatusList().then(res=>{
     this.SprintStatus=res as GetSprintStatusData[];   
   });
@@ -94,7 +92,6 @@ export class AddEditSprintComponent implements OnInit {
          }
        );
        this.dialogRef.close();
-       this.ngOnInit();
    }
 
    updateSprint(formvalues)
