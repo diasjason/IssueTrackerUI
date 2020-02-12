@@ -32,6 +32,8 @@ import { AddEditSprintComponent } from './Components/add-edit-sprint/add-edit-sp
 import { AddEditReleaseComponent } from './Components/add-edit-release/add-edit-release.component';
 import { ReusableModalComponent } from './Components/reusable-modal/reusable-modal.component';
 import { ReleaseComponent } from './Components/release/release.component';
+import { UserService } from './services/user.service';
+import { LoginFormComponent } from './Components/login-form/login-form.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,8 @@ import { ReleaseComponent } from './Components/release/release.component';
     AddEditSprintComponent,
     AddEditReleaseComponent,
     ReusableModalComponent,
-    ReleaseComponent
+    ReleaseComponent,
+    LoginFormComponent
   ],
   imports: [
     BrowserModule,
@@ -68,7 +71,7 @@ import { ReleaseComponent } from './Components/release/release.component';
     MatDialogModule,
     MatSelectModule
   ],
-  providers: [IssueTrackerService],
+  providers: [IssueTrackerService,UserService],
   bootstrap: [AppComponent],
   exports:[MatTableModule,MatSortModule,MatPaginatorModule],
   entryComponents:[AddEditSprintComponent,AddEditReleaseComponent,ReusableModalComponent]
