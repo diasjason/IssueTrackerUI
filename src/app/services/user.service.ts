@@ -15,12 +15,10 @@ import { CreateSignInUserRequest } from '../Components/CreateSignInUserRequest';
 export class UserService  {
 
   baseUrl: string = '';
-
   // Observable navItem source
   private _authNavStatusSource = new BehaviorSubject<boolean>(false);
   // Observable navItem stream
   authNavStatus$ = this._authNavStatusSource.asObservable();
-
   private loggedIn = false;
 
   constructor(private http: HttpClient) {
@@ -42,42 +40,32 @@ export class UserService  {
   //     //.catch(this.handleError);
   // }  
 
-   login(Username, Password) {
-      let headers = new HttpHeaders();
-    
-            console.log(Username,Password,"service");
-      headers.append('Content-Type', 'application/json');
-   
-    return this.http.post(this.baseUrl+'/api/SignIn',JSON.stringify({Username,Password}),{headers})
-    .pipe(map((response:Response)=>response.json()),
-          map(res => {
-            console.log(res,"service");
-         // localStorage.setItem('auth_token', res.auth_token);
-          this.loggedIn = true;
-          this._authNavStatusSource.next(true);
-          return true;})
-    );   
-    // return this.http
-    //   .post(
-    //   this.baseUrl + '/api/SignIn',
-    //   JSON.stringify({ userName, password }),{ headers }
-    //   )
-    //   .map(res => res.json())
-    //   .map(res => {
-    //     localStorage.setItem('auth_token', res.auth_token);
-    //     this.loggedIn = true;
-    //     this._authNavStatusSource.next(true);
-    //     return true;
-    //   });
-      //.catch(this.handleError);
-  }
+  //  login(Username, Password) {
+  //     let headers = new HttpHeaders();    
+  //     console.log(Username,Password,"service");
+  //     headers.append('Content-Type', 'application/json');   
+  //   return this.http.post(this.baseUrl+'/api/SignIn',JSON.stringify({Username,Password}),{headers})
+  //   .pipe(map((response:Response)=>response.json()),
+  //         map(res => {
+  //           console.log(res,"service");
+  //        // localStorage.setItem('auth_token', res.auth_token);
+  //         this.loggedIn = true;
+  //         this._authNavStatusSource.next(true);
+  //         return true;})
+  //   );      
+  // }
 
   LoginMethod(createSignInUserRequest:CreateSignInUserRequest) :Observable<any>{ 
-
     let url="https://localhost:44322/api/SignIn/";
-    console.log(createSignInUserRequest);
-    return this.http.post<any>(url,createSignInUserRequest);
+    return this.http.post<any>(url,createSignInUserRequest).
+    pipe(map(res => {      
+           localStorage.setItem('auth_token', res.token);
+           console.log('token-',res.token);
+          this.loggedIn = true;
+          this._authNavStatusSource.next(true);
+          return true;}));
   }
+
   logout() {
     localStorage.removeItem('auth_token');
     this.loggedIn = false;

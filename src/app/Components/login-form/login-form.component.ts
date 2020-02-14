@@ -4,6 +4,8 @@ import {Router,ActivatedRoute} from '@angular/router';
 import {UserService} from '../../services/user.service';
 // import 'rxjs/add/operator/finally';
 import { finalize } from 'rxjs/operators';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+import { CreateSignInUserRequest } from '../CreateSignInUserRequest';
 
 @Component({
   selector: 'app-login-form',
@@ -19,6 +21,8 @@ export class LoginFormComponent implements OnInit {
   isRequesting: boolean;
   submitted: boolean = false;
   credentials:CreateSignInUserRequest= { Username: '', Password: ''};
+  token:string;
+  expiration:Date;
 
   constructor(private userService:UserService,private router:Router,private activatedRoute:ActivatedRoute) { }
 
@@ -38,10 +42,9 @@ export class LoginFormComponent implements OnInit {
       this.userService.LoginMethod(value)
         .pipe(finalize(() => this.isRequesting = false))
         .subscribe(
-        result => {   
-          console.log(result);      
+       result => {  
           if (result) {
-             this.router.navigate(['/AddEditSprints']);             
+             this.router.navigate(['/Sprints']);             
           }
         },
         error => this.errors = error);
@@ -54,7 +57,7 @@ export class LoginFormComponent implements OnInit {
 
 
 
-export interface CreateSignInUserRequest{
-  Username:string;
-  Password:string;
-}
+// export interface CreateSignInUserRequest{
+//   Username:string;
+//   Password:string;
+// }
