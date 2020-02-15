@@ -18,7 +18,7 @@ export class LoginFormComponent implements OnInit {
   errors: string;
   isRequesting: boolean;
   submitted: boolean = false;
-  credentials:Credentials= { userName: '', password: ''};
+  credentials:CreateSignInUserRequest= { Username: '', Password: ''};
 
   constructor(private userService:UserService,private router:Router,private activatedRoute:ActivatedRoute) { }
 
@@ -26,16 +26,16 @@ export class LoginFormComponent implements OnInit {
     this.subscription=this.activatedRoute.queryParams.subscribe(
       (param:any)=>{
         this.brandNew=param['brandNew'],
-        this.credentials.userName=param['userName']
+        this.credentials.Username=param['userName']
       });
   }
 
-  login({ value, valid }: { value: Credentials, valid: boolean }) {
+  login({ value, valid }: { value: CreateSignInUserRequest, valid: boolean }) {
     this.submitted = true;
     this.isRequesting = true;
     this.errors='';
     if (valid) {
-      this.userService.login(value.userName, value.password)
+      this.userService.LoginMethod(value)
         .pipe(finalize(() => this.isRequesting = false))
         .subscribe(
         result => {   
@@ -54,7 +54,7 @@ export class LoginFormComponent implements OnInit {
 
 
 
-export interface Credentials{
-  userName:string;
-  password:string;
+export interface CreateSignInUserRequest{
+  Username:string;
+  Password:string;
 }

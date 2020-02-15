@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse, HttpRequest ,HttpHeaders} from '@angular/common/http';
 
- import { BehaviorSubject } from 'rxjs'; 
+ import { BehaviorSubject, Observable } from 'rxjs'; 
 import { map } from 'rxjs/operators';
+import { CreateSignInUserRequest } from '../Components/CreateSignInUserRequest';
 
 // Add the RxJS Observable operators we need in this app.
 //import '../../rxjs-operators';
@@ -41,11 +42,13 @@ export class UserService  {
   //     //.catch(this.handleError);
   // }  
 
-   login(userName, password) {
-    let headers = new HttpHeaders();
-    headers.append('Content-Type', 'application/json');
-
-    return this.http.post(this.baseUrl+'/api/SignIn',JSON.stringify({userName,password}),{headers})
+   login(Username, Password) {
+      let headers = new HttpHeaders();
+    
+            console.log(Username,Password,"service");
+      headers.append('Content-Type', 'application/json');
+   
+    return this.http.post(this.baseUrl+'/api/SignIn',JSON.stringify({Username,Password}),{headers})
     .pipe(map((response:Response)=>response.json()),
           map(res => {
             console.log(res,"service");
@@ -53,7 +56,7 @@ export class UserService  {
           this.loggedIn = true;
           this._authNavStatusSource.next(true);
           return true;})
-    );
+    );   
     // return this.http
     //   .post(
     //   this.baseUrl + '/api/SignIn',
@@ -69,6 +72,12 @@ export class UserService  {
       //.catch(this.handleError);
   }
 
+  LoginMethod(createSignInUserRequest:CreateSignInUserRequest) :Observable<any>{ 
+
+    let url="https://localhost:44322/api/SignIn/";
+    console.log(createSignInUserRequest);
+    return this.http.post<any>(url,createSignInUserRequest);
+  }
   logout() {
     localStorage.removeItem('auth_token');
     this.loggedIn = false;

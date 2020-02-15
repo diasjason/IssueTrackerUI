@@ -1112,25 +1112,25 @@ export class SignInClient {
         this.baseUrl = baseUrl ? baseUrl : "https://localhost:44322";
     }
 
-    signIn(userRequest: CreateSignInUserRequest): Promise<FileResponse | null> {
-        let url_ = this.baseUrl + "/api/SignIn";
-        url_ = url_.replace(/[?&]$/, "");
+    // signIn(userRequest: CreateSignInUserRequest): Promise<FileResponse | null> {
+    //     let url_ = this.baseUrl + "/api/SignIn";
+    //     url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(userRequest);
+    //     const content_ = JSON.stringify(userRequest);
 
-        let options_ = <RequestInit>{
-            body: content_,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/octet-stream"
-            }
-        };
+    //     let options_ = <RequestInit>{
+    //         body: content_,
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             "Accept": "application/octet-stream"
+    //         }
+    //     };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processSignIn(_response);
-        });
-    }
+    //     return this.http.fetch(url_, options_).then((_response: Response) => {
+    //         return this.processSignIn(_response);
+    //     });
+    // }
 
     protected processSignIn(response: Response): Promise<FileResponse | null> {
         const status = response.status;
@@ -2104,29 +2104,29 @@ export interface IUser {
     password: string;
 }
 
-export class CreateSignInUserRequest extends User implements ICreateSignInUserRequest {
+// export class CreateSignInUserRequest extends User implements ICreateSignInUserRequest {
 
-    constructor(data?: ICreateSignInUserRequest) {
-        super(data);
-    }
+//     constructor(data?: ICreateSignInUserRequest) {
+//         super(data);
+//     }
 
-    init(_data?: any) {
-        super.init(_data);
-    }
+//     init(_data?: any) {
+//         super.init(_data);
+//     }
 
-    static fromJS(data: any): CreateSignInUserRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new CreateSignInUserRequest();
-        result.init(data);
-        return result;
-    }
+//     static fromJS(data: any): CreateSignInUserRequest {
+//         data = typeof data === 'object' ? data : {};
+//         let result = new CreateSignInUserRequest();
+//         result.init(data);
+//         return result;
+//     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        super.toJSON(data);
-        return data; 
-    }
-}
+//     toJSON(data?: any) {
+//         data = typeof data === 'object' ? data : {};
+//         super.toJSON(data);
+//         return data; 
+//     }
+// }
 
 export interface ICreateSignInUserRequest extends IUser {
 }
