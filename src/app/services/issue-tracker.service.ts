@@ -29,14 +29,15 @@ export class SprintsClient {
     getSprints(): Promise<GetSprintData[]> {
         let url_ = this.baseUrl + "/api/Sprints";
         url_ = url_.replace(/[?&]$/, "");
-
+        const token=localStorage.getItem('auth_token');
         let options_ = <RequestInit>{
-            method: "GET",
+            method: "GET",            
             headers: {
-                "Accept": "application/json"
+                "Accept": "application/json",
+                "Authorization":"Bearer "+token
             }
         };
-
+console.log(options_);
         return this.http.fetch(url_, options_).then((_response: Response) => {
             return this.processGetSprints(_response);
         });

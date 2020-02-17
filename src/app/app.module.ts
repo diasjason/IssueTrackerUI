@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule} from '@angular/common/http';
+import { HttpClientModule,HTTP_INTERCEPTORS} from '@angular/common/http';
 import { FormsModule} from '@angular/forms';
 import { ReactiveFormsModule} from '@angular/forms';
 
@@ -34,6 +34,7 @@ import { ReusableModalComponent } from './Components/reusable-modal/reusable-mod
 import { ReleaseComponent } from './Components/release/release.component';
 import { UserService } from './services/user.service';
 import { LoginFormComponent } from './Components/login-form/login-form.component';
+import { JwtInterceptor } from './jwt-interceptor';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,11 @@ import { LoginFormComponent } from './Components/login-form/login-form.component
     MatDialogModule,
     MatSelectModule
   ],
-  providers: [IssueTrackerService,UserService],
+  providers: [IssueTrackerService,UserService,{
+    provide: HTTP_INTERCEPTORS,
+    useClass: JwtInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent],
   exports:[MatTableModule,MatSortModule,MatPaginatorModule],
   entryComponents:[AddEditSprintComponent,AddEditReleaseComponent,ReusableModalComponent]

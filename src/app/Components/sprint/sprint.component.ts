@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource, MatSort,MatPaginator, MatDialogConfig, MatDialog } from '@angular/material';
 import { AddEditSprintComponent } from '../add-edit-sprint/add-edit-sprint.component';
 import { ReusableModalComponent } from '../reusable-modal/reusable-modal.component';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-sprint',
@@ -20,7 +21,7 @@ export class SprintComponent implements OnInit ,AfterViewInit{
    @ViewChild(MatSort,{static:false}) sort: MatSort;
    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;   
 
-  constructor(private route:ActivatedRoute,private router:Router,private matDialog:MatDialog)
+  constructor(private route:ActivatedRoute,private router:Router,private matDialog:MatDialog,private userService:UserService)
    { 
    }
 
@@ -68,5 +69,9 @@ export class SprintComponent implements OnInit ,AfterViewInit{
       SprintId:id
     }
     const modalDialog = this.matDialog.open(ReusableModalComponent, dialogConfig);
+  }
+
+  LogOut()
+  {this.userService.logout();
   }
 }
