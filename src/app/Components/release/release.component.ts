@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource, MatSort,MatPaginator, MatDialogConfig, MatDialog } from '@angular/material';
 import { AddEditReleaseComponent } from '../add-edit-release/add-edit-release.component';
 import { ReusableModalComponent } from '../reusable-modal/reusable-modal.component';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-release',
@@ -14,8 +16,9 @@ import { ReusableModalComponent } from '../reusable-modal/reusable-modal.compone
 export class ReleaseComponent implements OnInit {
 
   public dataSource = new MatTableDataSource<GetReleaseData>();
+  http:HttpClient;
   public displayedColumns = ['releaseName', 'startDate','endDate','details','update', 'delete'];
-  release:ReleasesClient = new ReleasesClient();
+  release:ReleasesClient = new ReleasesClient(this.http,"");
 
    @ViewChild(MatSort,{static:false}) sort: MatSort;
    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;   
@@ -33,9 +36,9 @@ export class ReleaseComponent implements OnInit {
   }
   
   getReleaseList() {
-    this.release.getReleaseList().then(res=>{              
+    this.release.getReleaseList().pipe(map(res=>{              
        this.dataSource.data = res as GetReleaseData[];        
-    });    
+    }));    
   }
 
   public redirectToUpdatePage(id):void{     

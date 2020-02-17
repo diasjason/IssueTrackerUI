@@ -6,6 +6,8 @@ import { MatTableDataSource, MatSort,MatPaginator, MatDialogConfig, MatDialog } 
 import { AddEditSprintComponent } from '../add-edit-sprint/add-edit-sprint.component';
 import { ReusableModalComponent } from '../reusable-modal/reusable-modal.component';
 import { UserService } from 'src/app/services/user.service';
+import { map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-sprint',
@@ -15,16 +17,17 @@ import { UserService } from 'src/app/services/user.service';
 export class SprintComponent implements OnInit ,AfterViewInit{
   
   public dataSource = new MatTableDataSource<GetSprintData>();
+ // private  http:HttpClient;
   public displayedColumns = ['sprintName','sprintPoints', 'startDate','endDate','details','update', 'delete'];
-  sprint:SprintsClient = new SprintsClient();
+  
 
    @ViewChild(MatSort,{static:false}) sort: MatSort;
-   @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;   
+   @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;     
+   sprint:SprintsClient = new SprintsClient(this.http,""); 
 
-  constructor(private route:ActivatedRoute,private router:Router,private matDialog:MatDialog,private userService:UserService)
+  constructor(private route:ActivatedRoute,private router:Router,private matDialog:MatDialog,private userService:UserService,private http:HttpClient)
    { 
    }
-
   ngOnInit() {   
       this.getSprintList();
   }
@@ -35,9 +38,11 @@ export class SprintComponent implements OnInit ,AfterViewInit{
   }
   
   getSprintList()  {
-    this.sprint.getSprints().then(res=>{              
-       this.dataSource.data = res as GetSprintData[];        
-    });    
+    console.log("sprint");
+    this.sprint.getSprints().pipe(map(res=>{              
+       this.dataSource.data = res as GetSprintData[];   
+            
+    }));    
   }
 
   public redirectToUpdatePage(id):void{     

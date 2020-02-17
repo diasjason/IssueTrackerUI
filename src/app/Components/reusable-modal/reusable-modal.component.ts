@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { SprintsClient } from 'src/app/services/issue-tracker.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-reusable-modal',
@@ -9,7 +10,8 @@ import { SprintsClient } from 'src/app/services/issue-tracker.service';
 })
 export class ReusableModalComponent implements OnInit {
   sprintId:number=0;
-  sprint:SprintsClient = new SprintsClient();
+  http:HttpClient;
+  sprint:SprintsClient = new SprintsClient(this.http,"");
   
   constructor(  public dialogRef: MatDialogRef<ReusableModalComponent>,
     @Inject(MAT_DIALOG_DATA) public modalData: any

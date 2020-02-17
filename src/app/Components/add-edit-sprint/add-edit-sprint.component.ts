@@ -5,6 +5,8 @@ import { FormGroup,FormControl, Validators ,FormBuilder} from '@angular/forms';
 import { Location } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ActivatedRoute, Params } from '@angular/router';
+import { map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-aesprint',
@@ -17,7 +19,8 @@ export class AddEditSprintComponent implements OnInit {
   pageTitle: string;
   sprintForm:FormGroup;
   AddButton=true;
-  sprint:SprintsClient = new SprintsClient(); 
+  http:HttpClient
+  sprint:SprintsClient = new SprintsClient(this.http,""); 
   public SprintStatus;
 
   constructor(private location: Location,private fb:FormBuilder,
@@ -33,9 +36,9 @@ export class AddEditSprintComponent implements OnInit {
     this.pageTitle=this.editMode?'Edit Sprint':'Add Sprint';  
   }
 
-  sprintStatuslist= this.sprint.getSprintStatusList().then(res=>{
+  sprintStatuslist= this.sprint.getSprintStatusList().pipe(map(res=>{
     this.SprintStatus=res as GetSprintStatusData[];   
-  });
+  }));
 
   createForm()
   {
@@ -52,9 +55,9 @@ export class AddEditSprintComponent implements OnInit {
   private initForm()
   {
     if(this.editMode){  
-       this.sprint.getSprint(this.data.id).then(res=>{   
+       this.sprint.getSprint(this.data.id).pipe(map(res=>{   
          this.sprintForm.setValue(res);
-      });
+      }));
       this.AddButton=false;
    }
   }
@@ -85,12 +88,12 @@ export class AddEditSprintComponent implements OnInit {
        newSprint.startDate =formvalues.startDate;
        newSprint.endDate = formvalues.endDate;
        newSprint.sprintStatusId=formvalues.sprintStatusId;
-       this.sprint.postSprint(newSprint).then(res=>{
+       this.sprint.postSprint(newSprint).pipe(map(res=>{
            console.log(res);
          },error=>{
            console.log(error);
          }
-       );
+       ));
        this.dialogRef.close();
    }
 
@@ -106,12 +109,12 @@ export class AddEditSprintComponent implements OnInit {
       updateSprint.sprintId=parseInt(this.sprintId);
       updateSprint.sprintStatusId=formvalues.sprintStatusId;
 
-      this.sprint.putSprint(updateSprint).then(res=>{
+      this.sprint.putSprint(updateSprint).pipe(map(res=>{
           console.log(res);
         },error=>{
           console.log(error);
         }
-      );
+      ));
       this.dialogRef.close();
    }
 
