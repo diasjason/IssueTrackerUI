@@ -81,7 +81,6 @@ export class UserService  {
   }
 
   logout() {
-    debugger;
     localStorage.removeItem('auth_token');
     this.loggedIn = false;
     this._authNavStatusSource.next(false);

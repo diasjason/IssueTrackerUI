@@ -1,4 +1,4 @@
-//import { Injectable } from '@angular/core';
+
 import { mergeMap as _observableMergeMap, catchError as _observableCatch } from 'rxjs/operators';
 import { Observable, throwError as _observableThrow, of as _observableOf } from 'rxjs';
 import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
@@ -20,6 +20,7 @@ export class IssueTrackerService {
 //----------------------
 // ReSharper disable InconsistentNaming
 
+
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 @Injectable()
@@ -36,7 +37,7 @@ export class SprintsClient {
     getSprints(): Observable<GetSprintData[]> {
         let url_ = this.baseUrl + "/api/Sprints";
         url_ = url_.replace(/[?&]$/, "");
-        
+
         let options_ : any = {
             observe: "response",
             responseType: "blob",			
@@ -44,9 +45,8 @@ export class SprintsClient {
                 "Accept": "application/json"
             })
         };
-        console.log(this.http,url_);
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetSprints(response_);
+            return this.processGetSprints(response_);            
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
@@ -254,7 +254,7 @@ export class SprintsClient {
                 "Accept": "application/json"
             })
         };
-
+console.log(id,options_);
         return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processDeleteSprint(response_);
         })).pipe(_observableCatch((response_: any) => {
@@ -302,7 +302,7 @@ export class SprintsClient {
                 "Accept": "application/json"
             })
         };
-
+        
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processGetSprintStatusList(response_);
         })).pipe(_observableCatch((response_: any) => {
@@ -2422,7 +2422,7 @@ export interface IGetReleaseData extends IRelease {
 
 export class EditReleaseRequest extends Release implements IEditReleaseRequest {
     releaseId!: number;
-    sprintStatusId!: number;
+    //sprintStatusId!: number;
 
     constructor(data?: IEditReleaseRequest) {
         super(data);
@@ -2432,7 +2432,7 @@ export class EditReleaseRequest extends Release implements IEditReleaseRequest {
         super.init(_data);
         if (_data) {
             this.releaseId = _data["releaseId"];
-            this.sprintStatusId = _data["sprintStatusId"];
+         //   this.sprintStatusId = _data["sprintStatusId"];
         }
     }
 
@@ -2446,7 +2446,7 @@ export class EditReleaseRequest extends Release implements IEditReleaseRequest {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["releaseId"] = this.releaseId;
-        data["sprintStatusId"] = this.sprintStatusId;
+       // data["sprintStatusId"] = this.sprintStatusId;
         super.toJSON(data);
         return data; 
     }
@@ -2454,7 +2454,7 @@ export class EditReleaseRequest extends Release implements IEditReleaseRequest {
 
 export interface IEditReleaseRequest extends IRelease {
     releaseId: number;
-    sprintStatusId: number;
+    //sprintStatusId: number;
 }
 
 export class CreateReleaseRequest extends Release implements ICreateReleaseRequest {
@@ -2652,3 +2652,4 @@ function blobToText(blob: any): Observable<string> {
         }
     });
 }
+

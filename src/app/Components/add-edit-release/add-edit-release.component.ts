@@ -16,27 +16,28 @@ export class AddEditReleaseComponent implements OnInit {
   
   releaseId:number=0;
   editMode = false;
+  pageTitle: string;
   releaseForm:FormGroup;
   AddButton=true;
-  http:HttpClient
   release:ReleasesClient = new ReleasesClient(this.http,""); 
   sprint:SprintsClient= new  SprintsClient(this.http,"");
   public SprintStatus;
 
   constructor(private location: Location,private fb:FormBuilder,
             public dialogRef: MatDialogRef<AddEditReleaseComponent>,
-             @Inject(MAT_DIALOG_DATA)public data:any,private route:ActivatedRoute) { }
+             @Inject(MAT_DIALOG_DATA)public data:any,private route:ActivatedRoute,private http:HttpClient) { }
 
   ngOnInit() {     
     this.createForm();
     this.releaseId=this.data.id?this.data.id:''
     this.editMode=this.data.id!=0;
-    this.initForm();
+    this.initForm();    
+    this.pageTitle=this.editMode?'Edit Release':'Add Release';  
   }
 
-  sprintStatuslist= this.sprint.getSprintStatusList().pipe(map(res=>{
+  sprintStatuslist= this.sprint.getSprintStatusList().subscribe(res=>{
     this.SprintStatus=res as GetSprintStatusData[];   
-  }));
+  });
 
   createForm()
   {
@@ -52,10 +53,9 @@ export class AddEditReleaseComponent implements OnInit {
   private initForm()
   {
     if(this.editMode){  
-       this.release.getRelease(this.data.id).pipe(map(res=>{
-         console.log(res);   
+       this.release.getRelease(this.data.id).subscribe(res=>{
          this.releaseForm.setValue(res);
-      }));
+      });
       this.AddButton=false;
    }
   }
@@ -85,12 +85,12 @@ export class AddEditReleaseComponent implements OnInit {
        newRelease.startDate =formvalues.startDate;
        newRelease.endDate = formvalues.endDate;
       // newSprint.sprintStatusId=formvalues.sprintStatusId;
-       this.release.postRelease(newRelease).pipe(map(res=>{
+       this.release.postRelease(newRelease).subscribe(res=>{
            console.log(res);
          },error=>{
            console.log(error);
          }
-       ));
+       );
        this.dialogRef.close();
    }
 
@@ -103,12 +103,12 @@ export class AddEditReleaseComponent implements OnInit {
       updateRelease.releaseId=this.releaseId;
       updateRelease.sprintStatusId=formvalues.sprintStatusId;
 
-      this.release.putRelease(updateRelease).pipe(map(res=>{
+      this.release.putRelease(updateRelease).subscribe(res=>{
           console.log(res);
         },error=>{
           console.log(error);
         }
-      ));
+      );
       this.dialogRef.close();
    }
 }

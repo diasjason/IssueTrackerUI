@@ -18,12 +18,12 @@ export class SprintComponent implements OnInit ,AfterViewInit{
   
   public dataSource = new MatTableDataSource<GetSprintData>();
  // private  http:HttpClient;
-  public displayedColumns = ['sprintName','sprintPoints', 'startDate','endDate','details','update', 'delete'];
-  
+  public displayedColumns = ['sprintName','sprintPoints', 'startDate','endDate','update', 'delete'];
+  baseurl="https://localhost:44322";
 
    @ViewChild(MatSort,{static:false}) sort: MatSort;
    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;     
-   sprint:SprintsClient = new SprintsClient(this.http,""); 
+   sprint:SprintsClient = new SprintsClient(this.http,this.baseurl); 
 
   constructor(private route:ActivatedRoute,private router:Router,private matDialog:MatDialog,private userService:UserService,private http:HttpClient)
    { 
@@ -35,22 +35,23 @@ export class SprintComponent implements OnInit ,AfterViewInit{
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;    
     this.dataSource.paginator = this.paginator;
+    debugger;
+    this.getSprintList();
   }
   
   getSprintList()  {
     console.log("sprint");
-    this.sprint.getSprints().pipe(map(res=>{              
-       this.dataSource.data = res as GetSprintData[];   
-            
-    }));    
+    this.sprint.getSprints().subscribe(res=>{              
+       this.dataSource.data = res as GetSprintData[];             
+    });    
   }
 
   public redirectToUpdatePage(id):void{     
     const dialogConfig = new MatDialogConfig();
-    this.matDialog.open(AddEditSprintComponent,{ data:{id}});    
+    this.matDialog.open(AddEditSprintComponent,{ data:{id}});  
   }
-  public redirectToDetails(id):void{    
-  }
+  // public redirectToDetails(id):void{    
+  // }
 
   public redirectToDelete(id):void  {
     this.openCofirmationModal(id);
@@ -68,15 +69,31 @@ export class SprintComponent implements OnInit ,AfterViewInit{
     dialogConfig.height = "150px";
     dialogConfig.width = "400px";
     dialogConfig.data = {
-      name: "Delete",
+      name: "Sprint",
       title: "Are you sure you want to Delete?",
       actionButtonText: "Delete",
-      SprintId:id
+      Id:id
     }
     const modalDialog = this.matDialog.open(ReusableModalComponent, dialogConfig);
   }
 
   LogOut()
-  {this.userService.logout();
+  {this.openLogOutModal();
+    //this.userService.logout();
   }
+  openLogOutModal() {
+    const dialogConfig = new MatDialogConfig();
+   // dialogConfig.disableClose = false;
+    dialogConfig.id = "modal-component";
+    dialogConfig.height = "150px";
+    dialogConfig.width = "400px";
+    dialogConfig.data = {
+      name: "Logout",
+      title: "Are you sure you want to Logout?",
+      actionButtonText: "LogOut",
+      Id:0
+    }
+    const modalDialog = this.matDialog.open(ReusableModalComponent, dialogConfig);
+  }
+
 }

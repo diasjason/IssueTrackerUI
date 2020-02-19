@@ -19,14 +19,13 @@ export class AddEditSprintComponent implements OnInit {
   pageTitle: string;
   sprintForm:FormGroup;
   AddButton=true;
-  http:HttpClient
   sprint:SprintsClient = new SprintsClient(this.http,""); 
   public SprintStatus;
 
   constructor(private location: Location,private fb:FormBuilder,
             public dialogRef: MatDialogRef<AddEditSprintComponent>,
-             @Inject(MAT_DIALOG_DATA)public data:any,private route:ActivatedRoute)  { }
-
+             @Inject(MAT_DIALOG_DATA)public data:any,private route:ActivatedRoute,private http:HttpClient) 
+     { }
 
   ngOnInit() {   
     this.createForm();
@@ -36,9 +35,9 @@ export class AddEditSprintComponent implements OnInit {
     this.pageTitle=this.editMode?'Edit Sprint':'Add Sprint';  
   }
 
-  sprintStatuslist= this.sprint.getSprintStatusList().pipe(map(res=>{
+  sprintStatuslist= this.sprint.getSprintStatusList().subscribe(res=>{    
     this.SprintStatus=res as GetSprintStatusData[];   
-  }));
+  });
 
   createForm()
   {
@@ -52,14 +51,15 @@ export class AddEditSprintComponent implements OnInit {
       sprintStatusId:['']
     });     
   }
+
   private initForm()
   {
     if(this.editMode){  
-       this.sprint.getSprint(this.data.id).pipe(map(res=>{   
+       this.sprint.getSprint(this.data.id).subscribe(res=>{   
          this.sprintForm.setValue(res);
-      }));
+      });
       this.AddButton=false;
-   }
+    }
   }
 
   public hasError = (controlName: string, errorName: string) =>{
@@ -88,12 +88,12 @@ export class AddEditSprintComponent implements OnInit {
        newSprint.startDate =formvalues.startDate;
        newSprint.endDate = formvalues.endDate;
        newSprint.sprintStatusId=formvalues.sprintStatusId;
-       this.sprint.postSprint(newSprint).pipe(map(res=>{
+       this.sprint.postSprint(newSprint).subscribe(res=>{
            console.log(res);
          },error=>{
            console.log(error);
          }
-       ));
+       );
        this.dialogRef.close();
    }
 
@@ -109,12 +109,12 @@ export class AddEditSprintComponent implements OnInit {
       updateSprint.sprintId=parseInt(this.sprintId);
       updateSprint.sprintStatusId=formvalues.sprintStatusId;
 
-      this.sprint.putSprint(updateSprint).pipe(map(res=>{
+      this.sprint.putSprint(updateSprint).subscribe(res=>{
           console.log(res);
         },error=>{
           console.log(error);
         }
-      ));
+      );
       this.dialogRef.close();
    }
 

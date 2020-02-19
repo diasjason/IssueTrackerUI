@@ -16,14 +16,14 @@ import { map } from 'rxjs/operators';
 export class ReleaseComponent implements OnInit {
 
   public dataSource = new MatTableDataSource<GetReleaseData>();
-  http:HttpClient;
-  public displayedColumns = ['releaseName', 'startDate','endDate','details','update', 'delete'];
+  
+  public displayedColumns = ['releaseName', 'startDate','endDate','update', 'delete'];
   release:ReleasesClient = new ReleasesClient(this.http,"");
 
    @ViewChild(MatSort,{static:false}) sort: MatSort;
    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;   
 
-  constructor(private route:ActivatedRoute,private router:Router,private matDialog:MatDialog)
+  constructor(private route:ActivatedRoute,private router:Router,private matDialog:MatDialog,private http:HttpClient)
    {    }
 
   ngOnInit() {   
@@ -36,9 +36,9 @@ export class ReleaseComponent implements OnInit {
   }
   
   getReleaseList() {
-    this.release.getReleaseList().pipe(map(res=>{              
+    this.release.getReleaseList().subscribe(res=>{              
        this.dataSource.data = res as GetReleaseData[];        
-    }));    
+    });    
   }
 
   public redirectToUpdatePage(id):void{     
@@ -49,7 +49,7 @@ export class ReleaseComponent implements OnInit {
   public redirectToDelete(id):void  {
     this.openCofirmationModal(id);
   }
-  public redirectToDetails(id):void{}
+  // public redirectToDetails(id):void{}
 
   openModal() {
     const dialogConfig = new MatDialogConfig();   
@@ -59,14 +59,14 @@ export class ReleaseComponent implements OnInit {
   openCofirmationModal(id) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
-    dialogConfig.id = "modal-component";
+    dialogConfig.id = "Release-component";
     dialogConfig.height = "150px";
     dialogConfig.width = "400px";
     dialogConfig.data = {
-      name: "Delete",
+      name: "Release",
       title: "Are you sure you want to Delete?",
       actionButtonText: "Delete",
-      ReleaseId:id
+      Id:id
     }
     const modalDialog = this.matDialog.open(ReusableModalComponent, dialogConfig);
   }
