@@ -15,6 +15,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AddEditSprintComponent implements OnInit {
   sprintId:string='';
+  minDate:Date;
+  maxDate:Date;
   editMode = false;
   pageTitle: string;
   sprintForm:FormGroup;
@@ -25,8 +27,14 @@ export class AddEditSprintComponent implements OnInit {
   constructor(private location: Location,private fb:FormBuilder,
             public dialogRef: MatDialogRef<AddEditSprintComponent>,
              @Inject(MAT_DIALOG_DATA)public data:any,private route:ActivatedRoute,private http:HttpClient) 
-     { }
+     { 
+      const currentYear = new Date().getFullYear();
+      const today=new Date().getDate();
+      this.minDate = new Date(currentYear , 0, today);
+      this.maxDate = new Date(currentYear + 1, 11, 31);
+     }
 
+     
   ngOnInit() {   
     this.createForm();
     this.sprintId=this.data.id?this.data.id:''
@@ -45,9 +53,9 @@ export class AddEditSprintComponent implements OnInit {
       sprintId:this.sprintId?this.sprintId:'',
       sprintName:['',[Validators.required,Validators.minLength(5)]],
       sprintPoints:['',Validators.required],
-      startDate:'',
+      startDate:[''],
       endDate:'',
-      createdBy:'',
+      createdBy:[''],
       sprintStatusId:['']
     });     
   }

@@ -34,13 +34,12 @@ export class SprintComponent implements OnInit ,AfterViewInit{
 
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;    
-    this.dataSource.paginator = this.paginator;
-    debugger;
+    this.dataSource.paginator = this.paginator;    
     this.getSprintList();
   }
   
   getSprintList()  {
-    console.log("sprint");
+    //console.log("sprint");
     this.sprint.getSprints().subscribe(res=>{              
        this.dataSource.data = res as GetSprintData[];             
     });    
@@ -59,7 +58,11 @@ export class SprintComponent implements OnInit ,AfterViewInit{
 
   openModal() {
     const dialogConfig = new MatDialogConfig();   
-    this.matDialog.open(AddEditSprintComponent,{ data:{id:0}});  
+    let model= this.matDialog.open(AddEditSprintComponent,{ data:{id:0}});
+    
+    model.afterClosed().subscribe(res=>{
+     this.getSprintList();
+    });  
   }
  
   openCofirmationModal(id) {
@@ -75,10 +78,14 @@ export class SprintComponent implements OnInit ,AfterViewInit{
       Id:id
     }
     const modalDialog = this.matDialog.open(ReusableModalComponent, dialogConfig);
+    modalDialog.afterClosed().subscribe(res=>{
+      this.getSprintList();
+    });
   }
 
   LogOut()
-  {this.openLogOutModal();
+  {
+    this.openLogOutModal();
     //this.userService.logout();
   }
   openLogOutModal() {

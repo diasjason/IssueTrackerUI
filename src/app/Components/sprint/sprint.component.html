@@ -6,7 +6,10 @@
   <span class="demo-toolbar"></span>       
   
 </mat-toolbar>    
-
+<!--create button on top-->
+<div>
+  <a (click)="openModal()" mat-button color="primary">Create Sprint</a>
+</div>
 
   <table mat-table [dataSource]="dataSource" matSort    >
     <ng-container matColumnDef="sprintName">

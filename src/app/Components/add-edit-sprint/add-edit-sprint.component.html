@@ -22,17 +22,17 @@
               </mat-form-field> 
 
               <mat-form-field>
-                <input matInput [matDatepicker]="picker" placeholder="Choose a StartDate" formControlName="startDate" id="startDate" 
-                    readonly (click)="picker.open()">
+                <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" placeholder="Choose a StartDate" formControlName="startDate" id="startDate" 
+                    readonly (click)="picker.open()" (keydown.enter)="OnInput(startDate.value)">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
+                <mat-datepicker #picker [startAt]="minDate"></mat-datepicker>
               </mat-form-field>
 
               <mat-form-field>
-                <input matInput [matDatepicker]="endatepicker" placeholder="Choose a EndDate" formControlName="endDate" id="EndDate" 
+                <input matInput [min]="startDate" [max]="maxDate" [matDatepicker]="endatepicker" placeholder="Choose a EndDate" formControlName="endDate" id="EndDate" 
                     readonly (click)="endatepicker.open()" >
                 <mat-datepicker-toggle matSuffix [for]="endatepicker"></mat-datepicker-toggle>
-                <mat-datepicker #endatepicker></mat-datepicker>
+                <mat-datepicker #endatepicker [startAt]="minDate"></mat-datepicker>
               </mat-form-field> 
 
               <!-- <mat-form-field>

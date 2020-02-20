@@ -53,7 +53,10 @@ export class ReleaseComponent implements OnInit {
 
   openModal() {
     const dialogConfig = new MatDialogConfig();   
-    this.matDialog.open(AddEditReleaseComponent,{ data:{id:0}});  
+    let model=this.matDialog.open(AddEditReleaseComponent,{ data:{id:0}});  
+    model.afterClosed().subscribe(res=>{
+      this.getReleaseList();
+    });
   }
  
   openCofirmationModal(id) {
@@ -69,6 +72,9 @@ export class ReleaseComponent implements OnInit {
       Id:id
     }
     const modalDialog = this.matDialog.open(ReusableModalComponent, dialogConfig);
+    modalDialog.afterClosed().subscribe(res=>{
+      this.getReleaseList();
+    });
   }
 }
 
