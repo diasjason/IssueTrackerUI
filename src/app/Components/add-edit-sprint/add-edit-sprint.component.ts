@@ -3,7 +3,7 @@ import { Component, OnInit, Inject, Optional } from '@angular/core';
 import { SprintsClient, CreateSprintRequest, EditSprintRequest, GetSprintStatusData}from 'src/app/services/issue-tracker.service';
 import { FormGroup,FormControl, Validators ,FormBuilder} from '@angular/forms';
 import { Location } from '@angular/common';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDatepickerInputEvent } from '@angular/material';
 import { ActivatedRoute, Params } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
@@ -16,6 +16,7 @@ import { HttpClient } from '@angular/common/http';
 export class AddEditSprintComponent implements OnInit {
   sprintId:string='';
   minDate:Date;
+  minEndDate:Date;
   maxDate:Date;
   editMode = false;
   pageTitle: string;
@@ -30,8 +31,10 @@ export class AddEditSprintComponent implements OnInit {
      { 
       const currentYear = new Date().getFullYear();
       const today=new Date().getDate();
-      this.minDate = new Date(currentYear , 0, today);
+      const month=new Date().getMonth();
+      this.minDate = new Date(currentYear , month, today);
       this.maxDate = new Date(currentYear + 1, 11, 31);
+      this.minEndDate=new Date(currentYear , month, today);
      }
 
      
@@ -53,8 +56,8 @@ export class AddEditSprintComponent implements OnInit {
       sprintId:this.sprintId?this.sprintId:'',
       sprintName:['',[Validators.required,Validators.minLength(5)]],
       sprintPoints:['',Validators.required],
-      startDate:[''],
-      endDate:'',
+      startDate:['',Validators.required],
+      endDate:['',Validators.required],
       createdBy:[''],
       sprintStatusId:['']
     });     
@@ -78,6 +81,13 @@ export class AddEditSprintComponent implements OnInit {
     this.dialogRef.close(); 
   }
   
+  addEvent(event: MatDatepickerInputEvent<Date>) {
+    const startDate=event.value.getDate();
+    const curentyear=event.value.getFullYear();
+    const currentMonth=event.value.getMonth();
+    this.minEndDate=new Date(curentyear,currentMonth,startDate+1);    
+  }
+
   onSubmit(){
     if(this.sprintForm.valid){
       if(!this.editMode){   
@@ -87,7 +97,7 @@ export class AddEditSprintComponent implements OnInit {
         this.updateSprint(this.sprintForm.value);
       } 
     }
-   }
+  }
  
    createSprint(formvalues){    
        let newSprint: CreateSprintRequest = new CreateSprintRequest();

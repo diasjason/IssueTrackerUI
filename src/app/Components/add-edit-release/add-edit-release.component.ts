@@ -2,7 +2,7 @@ import { Component, OnInit,Inject } from '@angular/core';
 import { ReleasesClient,SprintsClient, CreateReleaseRequest, EditReleaseRequest, GetSprintStatusData}from 'src/app/services/issue-tracker.service';
 import { FormGroup,FormControl, Validators ,FormBuilder} from '@angular/forms';
 import { Location } from '@angular/common';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDatepickerInputEvent } from '@angular/material';
 import { ActivatedRoute, Params } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
@@ -15,6 +15,9 @@ import { HttpClient } from '@angular/common/http';
 export class AddEditReleaseComponent implements OnInit {
   
   releaseId:number=0;
+  minDate:Date;
+  minEndDate:Date;
+  maxDate:Date;
   editMode = false;
   pageTitle: string;
   releaseForm:FormGroup;
@@ -25,7 +28,15 @@ export class AddEditReleaseComponent implements OnInit {
 
   constructor(private location: Location,private fb:FormBuilder,
             public dialogRef: MatDialogRef<AddEditReleaseComponent>,
-             @Inject(MAT_DIALOG_DATA)public data:any,private route:ActivatedRoute,private http:HttpClient) { }
+             @Inject(MAT_DIALOG_DATA)public data:any,private route:ActivatedRoute,private http:HttpClient)
+  {
+    const currentYear = new Date().getFullYear();
+      const today=new Date().getDate();
+      const month=new Date().getMonth();
+      this.minDate = new Date(currentYear , month, today);
+      this.maxDate = new Date(currentYear + 1, 11, 31);
+      this.minEndDate=new Date(currentYear , month, today);
+  }
 
   ngOnInit() {     
     this.createForm();
@@ -39,8 +50,7 @@ export class AddEditReleaseComponent implements OnInit {
     this.SprintStatus=res as GetSprintStatusData[];   
   });
 
-  createForm()
-  {
+  createForm() {
     this.releaseForm=this.fb.group({      
       releaseId:this.releaseId?this.releaseId:'',
       releaseName:['',[Validators.required,Validators.minLength(5)]],     
@@ -50,8 +60,8 @@ export class AddEditReleaseComponent implements OnInit {
       sprintStatusId:['']
     });     
   }
-  private initForm()
-  {
+
+  private initForm()  {
     if(this.editMode){  
        this.release.getRelease(this.data.id).subscribe(res=>{
          this.releaseForm.setValue(res);
@@ -67,7 +77,14 @@ export class AddEditReleaseComponent implements OnInit {
   closeDialog(){ 
     this.dialogRef.close(); 
   }
-
+  
+  addEvent(event: MatDatepickerInputEvent<Date>) {
+    const startDate=event.value.getDate();
+    const curentyear=event.value.getFullYear();
+    const currentMonth=event.value.getMonth();
+    this.minEndDate=new Date(curentyear,currentMonth,startDate+1);    
+  }
+    
   onSubmit(){
     if(this.releaseForm.valid){
       if(!this.editMode){   
@@ -79,7 +96,8 @@ export class AddEditReleaseComponent implements OnInit {
     }
    }
  
-   createRelease(formvalues){    
+   createRelease(formvalues){   
+      
        let newRelease: CreateReleaseRequest = new CreateReleaseRequest();
        newRelease.releaseName = formvalues.releaseName;
        newRelease.startDate =formvalues.startDate;
@@ -94,8 +112,7 @@ export class AddEditReleaseComponent implements OnInit {
        this.dialogRef.close();
    }
 
-   updateRelease(formvalues)
-   {      
+   updateRelease(formvalues) {      
       let updateRelease: EditReleaseRequest = new EditReleaseRequest();      
       updateRelease.releaseName = formvalues.releaseName;
       updateRelease.startDate = formvalues.startDate;
