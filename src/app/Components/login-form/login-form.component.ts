@@ -41,13 +41,12 @@ export class LoginFormComponent implements OnInit {
     if (valid) {
       this.userService.LoginMethod(value)
         .pipe(finalize(() => this.isRequesting = false))
-        .subscribe(
-       result => {  
-          if (result) {
-             this.router.navigate(['/Sprints']);             
-          }
-        },
-        error => this.errors = error);
+        .subscribe(result => {  
+            if (result) {
+              this.router.navigate(['/Sprints']);             
+             }
+            },error =>
+            this.errors = error);
     }
   }
 

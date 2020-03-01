@@ -2,10 +2,11 @@ import { Component, OnInit,Inject } from '@angular/core';
 import { ReleasesClient,SprintsClient, CreateReleaseRequest, EditReleaseRequest, GetSprintStatusData}from 'src/app/services/issue-tracker.service';
 import { FormGroup,FormControl, Validators ,FormBuilder} from '@angular/forms';
 import { Location } from '@angular/common';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDatepickerInputEvent } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDatepickerInputEvent, MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Params } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-add-edit-release',
@@ -27,7 +28,7 @@ export class AddEditReleaseComponent implements OnInit {
   public SprintStatus;
 
   constructor(private location: Location,private fb:FormBuilder,
-            public dialogRef: MatDialogRef<AddEditReleaseComponent>,
+            public dialogRef: MatDialogRef<AddEditReleaseComponent>,private _snackBar:MatSnackBar,
              @Inject(MAT_DIALOG_DATA)public data:any,private route:ActivatedRoute,private http:HttpClient)
   {
     const currentYear = new Date().getFullYear();
@@ -57,7 +58,8 @@ export class AddEditReleaseComponent implements OnInit {
       startDate:'',
       endDate:'',
       createdBy:'',
-      sprintStatusId:['']
+      sprintStatusId:[''],
+      sprintStatusName:''
     });     
   }
 
@@ -65,6 +67,10 @@ export class AddEditReleaseComponent implements OnInit {
     if(this.editMode){  
        this.release.getRelease(this.data.id).subscribe(res=>{
          this.releaseForm.setValue(res);
+         //mindate validation gives error if editing after the date entered
+         const startdate=res.startDate;
+         this.minDate=startdate;
+         this.minEndDate=new Date(startdate.getFullYear(),startdate.getMonth(),startdate.getDate()+1);
       });
       this.AddButton=false;
    }
@@ -87,8 +93,7 @@ export class AddEditReleaseComponent implements OnInit {
     
   onSubmit(){
     if(this.releaseForm.valid){
-      if(!this.editMode){   
-        console.log(this.releaseForm.value);     
+      if(!this.editMode){       
         this.createRelease(this.releaseForm.value);
       }else{
         this.updateRelease(this.releaseForm.value);
@@ -97,16 +102,19 @@ export class AddEditReleaseComponent implements OnInit {
    }
  
    createRelease(formvalues){   
-      
        let newRelease: CreateReleaseRequest = new CreateReleaseRequest();
        newRelease.releaseName = formvalues.releaseName;
        newRelease.startDate =formvalues.startDate;
        newRelease.endDate = formvalues.endDate;
-      // newSprint.sprintStatusId=formvalues.sprintStatusId;
-       this.release.postRelease(newRelease).subscribe(res=>{
-           console.log(res);
+       newRelease.sprintStatusId=formvalues.sprintStatusId;
+       this.release.postRelease(newRelease).subscribe(res=>{           
+           this._snackBar.open(res.message,"OK",{
+             duration:2000,
+           });
          },error=>{
-           console.log(error);
+          this._snackBar.open(error.message,"OK",{
+            duration:2000,
+          });
          }
        );
        this.dialogRef.close();
@@ -121,9 +129,12 @@ export class AddEditReleaseComponent implements OnInit {
       updateRelease.sprintStatusId=formvalues.sprintStatusId;
 
       this.release.putRelease(updateRelease).subscribe(res=>{
-          console.log(res);
-        },error=>{
-          console.log(error);
+          this._snackBar.open(res.message,"OK",{
+            duration:2000,
+          });
+        },error=>{this._snackBar.open(error.message,"OK",{
+          duration:2000,
+        });
         }
       );
       this.dialogRef.close();

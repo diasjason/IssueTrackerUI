@@ -1,0 +1,61 @@
+
+<div class="example-container">
+    <h2>TO DO </h2>
+
+    <div class="example-list"
+         cdkDropList
+         #todoList="cdkDropList"
+         [cdkDropListData]="TodoList"         
+         [cdkDropListConnectedTo]="[inProgressList,completedList]"
+         (cdkDropListDropped)="drop($event)">      
+      <mat-card *ngFor="let issue of TodoList"  class="example-box" cdkDrag>
+        <mat-card-header>
+          <mat-card-title>{{issue.subject}}</mat-card-title>
+          <mat-card-subtitle>{{issue.description}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <p>{{issue.tags}}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+</div>
+<div class="example-container">
+    <h2>IN PROGRESS </h2>
+
+    <div class="example-list"
+         cdkDropList
+         #inProgressList="cdkDropList"
+         [cdkDropListData]="InProgressList"
+         [cdkDropListConnectedTo]="[todoList,completedList]"  
+         (cdkDropListDropped)="drop($event)">      
+      <mat-card *ngFor="let issue of InProgressList"  class="example-box"  cdkDrag>
+        <mat-card-header>
+          <mat-card-title>{{issue.subject}}</mat-card-title>
+          <mat-card-subtitle>{{issue.description}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <p>{{issue.tags}}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+</div>
+<div class="example-container">
+    <h2>COMPLETED </h2>
+
+    <div class="example-list"
+         cdkDropList
+         #completedList="cdkDropList"
+         [cdkDropListData]="CompletedList"
+         [cdkDropListConnectedTo]="[inProgressList,completedList]"  
+         (cdkDropListDropped)="drop($event)">      
+      <mat-card *ngFor="let issue of CompletedList"  class="example-box"  cdkDrag>
+        <mat-card-header>
+          <mat-card-title>{{issue.subject}}</mat-card-title>
+          <mat-card-subtitle>{{issue.description}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <p>{{issue.tags}}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+</div>

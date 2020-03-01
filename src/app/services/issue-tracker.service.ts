@@ -1672,6 +1672,7 @@ export interface ISprint {
 
 export class GetSprintData extends Sprint implements IGetSprintData {
     sprintId!: number;
+    sprintStatusName!:string;
 
     constructor(data?: IGetSprintData) {
         super(data);
@@ -1681,6 +1682,7 @@ export class GetSprintData extends Sprint implements IGetSprintData {
         super.init(_data);
         if (_data) {
             this.sprintId = _data["sprintId"];
+            this.sprintStatusName=_data["sprintStatusName"];
         }
     }
 
@@ -1694,6 +1696,7 @@ export class GetSprintData extends Sprint implements IGetSprintData {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["sprintId"] = this.sprintId;
+        data["sprintStatusName"]=this.sprintStatusName;
         super.toJSON(data);
         return data; 
     }
@@ -1701,6 +1704,7 @@ export class GetSprintData extends Sprint implements IGetSprintData {
 
 export interface IGetSprintData extends ISprint {
     sprintId: number;
+    sprintStatusName:string;
 }
 
 export class SuccessResponse implements ISuccessResponse {
@@ -1877,7 +1881,7 @@ export class Issue implements IIssue {
     description?: string | undefined;
     assignedTo!: string;
     tags?: string | undefined;
-    issueStatus!: string;
+    issueStatusId!: string;
     createdBy?: string | undefined;
 
     constructor(data?: IIssue) {
@@ -1895,7 +1899,7 @@ export class Issue implements IIssue {
             this.description = _data["description"];
             this.assignedTo = _data["assignedTo"];
             this.tags = _data["tags"];
-            this.issueStatus = _data["issueStatus"];
+            this.issueStatusId = _data["issueStatusId"];
             this.createdBy = _data["createdBy"];
         }
     }
@@ -1913,7 +1917,7 @@ export class Issue implements IIssue {
         data["description"] = this.description;
         data["assignedTo"] = this.assignedTo;
         data["tags"] = this.tags;
-        data["issueStatus"] = this.issueStatus;
+        data["issueStatusId"] = this.issueStatusId;
         data["createdBy"] = this.createdBy;
         return data; 
     }
@@ -1924,12 +1928,13 @@ export interface IIssue {
     description?: string | undefined;
     assignedTo: string;
     tags?: string | undefined;
-    issueStatus: string;
+    issueStatusId: string;
     createdBy?: string | undefined;
 }
 
 export class GetIssueData extends Issue implements IGetIssueData {
     issueId!: number;
+    statusName!:string;
 
     constructor(data?: IGetIssueData) {
         super(data);
@@ -1939,6 +1944,7 @@ export class GetIssueData extends Issue implements IGetIssueData {
         super.init(_data);
         if (_data) {
             this.issueId = _data["issueId"];
+            this.statusName=_data["statusName"];
         }
     }
 
@@ -1952,6 +1958,7 @@ export class GetIssueData extends Issue implements IGetIssueData {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["issueId"] = this.issueId;
+        data["statusName"]=this.statusName;
         super.toJSON(data);
         return data; 
     }
@@ -1959,6 +1966,7 @@ export class GetIssueData extends Issue implements IGetIssueData {
 
 export interface IGetIssueData extends IIssue {
     issueId: number;
+    statusName:string;
 }
 
 export class EditIssueRequest extends Issue implements IEditIssueRequest {
@@ -2389,6 +2397,7 @@ export interface IRelease {
 
 export class GetReleaseData extends Release implements IGetReleaseData {
     releaseId!: number;
+    sprintStatusName:string;
 
     constructor(data?: IGetReleaseData) {
         super(data);
@@ -2398,6 +2407,7 @@ export class GetReleaseData extends Release implements IGetReleaseData {
         super.init(_data);
         if (_data) {
             this.releaseId = _data["releaseId"];
+            this.sprintStatusName=_data["sprintStatusName"];
         }
     }
 
@@ -2411,6 +2421,7 @@ export class GetReleaseData extends Release implements IGetReleaseData {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["releaseId"] = this.releaseId;
+        data["sprintStatusName"]=this.sprintStatusName;
         super.toJSON(data);
         return data; 
     }
@@ -2418,6 +2429,7 @@ export class GetReleaseData extends Release implements IGetReleaseData {
 
 export interface IGetReleaseData extends IRelease {
     releaseId: number;
+    sprintStatusName:string;
 }
 
 export class EditReleaseRequest extends Release implements IEditReleaseRequest {

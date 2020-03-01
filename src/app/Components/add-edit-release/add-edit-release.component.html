@@ -30,7 +30,7 @@
 
               <mat-form-field>
                     <mat-label>Select an option</mat-label>
-                    <mat-select formControlName="sprintStatusId">
+                    <mat-select formControlName="sprintStatusId" >
                         <mat-option *ngFor="let status of SprintStatus" [value]="status.sprintStatusId">
                             {{ status.sprintStatusName }}
                         </mat-option>

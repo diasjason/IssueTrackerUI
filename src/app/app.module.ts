@@ -20,7 +20,7 @@ import{MatCardModule,
   MatDatepickerModule, 
   MatNativeDateModule,
   MatDialogModule,
-  MatSelectModule,MatButtonModule,MatIconModule
+  MatSelectModule,MatButtonModule,MatIconModule,MatSnackBarModule
 }  from '@angular/material';
 import { LayoutModule } from '@angular/cdk/layout';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -35,6 +35,7 @@ import { ReleaseComponent } from './Components/release/release.component';
 import { UserService } from './services/user.service';
 import { LoginFormComponent } from './Components/login-form/login-form.component';
 import { JwtInterceptor } from './jwt-interceptor';
+import { IssuesComponent } from './Components/issues/issues.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { JwtInterceptor } from './jwt-interceptor';
     AddEditReleaseComponent,
     ReusableModalComponent,
     ReleaseComponent,
-    LoginFormComponent
+    LoginFormComponent,
+    IssuesComponent
   ],
   imports: [
     BrowserModule,
@@ -70,7 +72,8 @@ import { JwtInterceptor } from './jwt-interceptor';
     MatDatepickerModule, 
     MatNativeDateModule,
     MatDialogModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSnackBarModule
   ],
   providers: [IssueTrackerService,UserService,{
     provide: HTTP_INTERCEPTORS,

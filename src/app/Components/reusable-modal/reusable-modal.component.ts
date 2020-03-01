@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { SprintsClient, ReleasesClient, SuccessResponse } from 'src/app/services/issue-tracker.service';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'src/app/services/user.service';
@@ -13,9 +13,9 @@ export class ReusableModalComponent implements OnInit {
   Id:number=0;
   sprint:SprintsClient = new SprintsClient(this.http,"");
   release:ReleasesClient=new ReleasesClient(this.http,"");
-  message:string;
+  
   constructor(  public dialogRef: MatDialogRef<ReusableModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public modalData: any,private userService:UserService,private http:HttpClient)
+    @Inject(MAT_DIALOG_DATA) public modalData: any,private userService:UserService,private _snackBar:MatSnackBar,private http:HttpClient)
      { }
 
   ngOnInit() {
@@ -28,13 +28,16 @@ export class ReusableModalComponent implements OnInit {
     }
     else if(this.modalData.name=="Sprint"){
       this.sprint.deleteSprint(this.Id).subscribe(res=>{
-        this.message=res.message;
-        console.log(res);
+        this._snackBar.open(res.message,"OK",{
+          duration:2000,
+        });
       });
     }
     else if(this.modalData.name=="Release") {
       this.release.deleteRelease(this.Id).subscribe(res=>{
-        console.log(res);
+        this._snackBar.open(res.message,"OK",{
+          duration:2000,
+        });
       });
     }    
     this.closeModal();

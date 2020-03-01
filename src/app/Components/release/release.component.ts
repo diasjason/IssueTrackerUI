@@ -2,7 +2,7 @@ import { Component, OnInit,ViewChild, AfterViewInit } from '@angular/core';
 import { CreateReleaseRequest, GetReleaseData, Release, ReleasesClient}from 'src/app/services/issue-tracker.service';
 import { FormGroup, Validators ,FormBuilder} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatTableDataSource, MatSort,MatPaginator, MatDialogConfig, MatDialog } from '@angular/material';
+import { MatTableDataSource, MatSort,MatPaginator, MatDialogConfig, MatDialog} from '@angular/material';
 import { AddEditReleaseComponent } from '../add-edit-release/add-edit-release.component';
 import { ReusableModalComponent } from '../reusable-modal/reusable-modal.component';
 import { HttpClient } from '@angular/common/http';
@@ -17,7 +17,7 @@ export class ReleaseComponent implements OnInit {
 
   public dataSource = new MatTableDataSource<GetReleaseData>();
   
-  public displayedColumns = ['releaseName', 'startDate','endDate','update', 'delete'];
+  public displayedColumns = ['releaseName', 'startDate','endDate','sprintStatusName','update','delete'];
   release:ReleasesClient = new ReleasesClient(this.http,"");
 
    @ViewChild(MatSort,{static:false}) sort: MatSort;
@@ -36,7 +36,7 @@ export class ReleaseComponent implements OnInit {
   }
   
   getReleaseList() {
-    this.release.getReleaseList().subscribe(res=>{              
+    this.release.getReleaseList().subscribe(res=>{     
        this.dataSource.data = res as GetReleaseData[];        
     });    
   }
@@ -72,7 +72,7 @@ export class ReleaseComponent implements OnInit {
       Id:id
     }
     const modalDialog = this.matDialog.open(ReusableModalComponent, dialogConfig);
-    modalDialog.afterClosed().subscribe(res=>{
+    modalDialog.afterClosed().subscribe(res=>{      
       this.getReleaseList();
     });
   }

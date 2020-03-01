@@ -2,10 +2,9 @@ import { Component, OnInit,ViewChild, AfterViewInit } from '@angular/core';
 import { SprintsClient, CreateSprintRequest, GetSprintData, Sprint}from 'src/app/services/issue-tracker.service';
 import { FormGroup, Validators ,FormBuilder} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatTableDataSource, MatSort,MatPaginator, MatDialogConfig, MatDialog } from '@angular/material';
+import { MatTableDataSource, MatSort,MatPaginator, MatDialogConfig, MatDialog, MatSnackBar } from '@angular/material';
 import { AddEditSprintComponent } from '../add-edit-sprint/add-edit-sprint.component';
 import { ReusableModalComponent } from '../reusable-modal/reusable-modal.component';
-import { UserService } from 'src/app/services/user.service';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
@@ -18,14 +17,15 @@ export class SprintComponent implements OnInit ,AfterViewInit{
   
   public dataSource = new MatTableDataSource<GetSprintData>();
  // private  http:HttpClient;
-  public displayedColumns = ['sprintName','sprintPoints', 'startDate','endDate','update', 'delete'];
+  public displayedColumns = ['sprintName','sprintPoints', 'startDate','endDate','sprintStatusName','update', 'delete'];
   baseurl="https://localhost:44322";
 
    @ViewChild(MatSort,{static:false}) sort: MatSort;
    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;     
    sprint:SprintsClient = new SprintsClient(this.http,this.baseurl); 
 
-  constructor(private route:ActivatedRoute,private router:Router,private matDialog:MatDialog,private userService:UserService,private http:HttpClient)
+  constructor(private route:ActivatedRoute,private router:Router,private matDialog:MatDialog,
+    private _snackBar:MatSnackBar,private http:HttpClient)
    { 
    }
   ngOnInit() {   
@@ -39,8 +39,7 @@ export class SprintComponent implements OnInit ,AfterViewInit{
   }
   
   getSprintList()  {
-    //console.log("sprint");
-    this.sprint.getSprints().subscribe(res=>{              
+    this.sprint.getSprints().subscribe(res=>{   
        this.dataSource.data = res as GetSprintData[];             
     });    
   }
@@ -59,7 +58,6 @@ export class SprintComponent implements OnInit ,AfterViewInit{
   openModal() {
     const dialogConfig = new MatDialogConfig();   
     let model= this.matDialog.open(AddEditSprintComponent,{ data:{id:0}});
-    
     model.afterClosed().subscribe(res=>{
      this.getSprintList();
     });  
@@ -78,8 +76,8 @@ export class SprintComponent implements OnInit ,AfterViewInit{
       Id:id
     }
     const modalDialog = this.matDialog.open(ReusableModalComponent, dialogConfig);
-    modalDialog.afterClosed().subscribe(res=>{
-      this.getSprintList();
+    modalDialog.afterClosed().subscribe(res=>{      
+      this.getSprintList();      
     });
   }
 
@@ -88,6 +86,8 @@ export class SprintComponent implements OnInit ,AfterViewInit{
     this.openLogOutModal();
     //this.userService.logout();
   }
+
+  
   openLogOutModal() {
     const dialogConfig = new MatDialogConfig();
    // dialogConfig.disableClose = false;

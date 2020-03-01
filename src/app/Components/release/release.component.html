@@ -23,6 +23,11 @@
         <th mat-header-cell *matHeaderCellDef> EndDate </th>
         <td mat-cell *matCellDef="let element"> {{element.endDate|date}} </td>
       </ng-container>
+
+      <ng-container matColumnDef="sprintStatusName">
+        <th mat-header-cell *matHeaderCellDef > Status </th>
+        <td mat-cell *matCellDef="let element"> {{element.sprintStatusName}} </td>
+      </ng-container>
       
       <!-- <ng-container matColumnDef="details">
         <th mat-header-cell *matHeaderCellDef> Details </th>
