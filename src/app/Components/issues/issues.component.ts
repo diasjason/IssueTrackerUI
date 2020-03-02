@@ -51,7 +51,10 @@ export class IssuesComponent implements OnInit{
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    console.log(event);
+    const id=event.container.id;
+    console.log(id);
+
+//event.container.data[event.currentIndex]['id'];
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -62,7 +65,15 @@ export class IssuesComponent implements OnInit{
     console.log(event.previousContainer.data,
                 event.container.data,
                 event.previousIndex,
-                event.currentIndex);              
+                event.currentIndex);   
+      const y=event.container.data.length;
+      const index=event.currentIndex;   
+        if(index>=y/2)
+        {
+          console.log(y/2);
+        }else{
+          console.log(index,id);
+        }  
     }
   }
 
