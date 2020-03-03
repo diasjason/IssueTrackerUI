@@ -4,9 +4,7 @@ import { FormGroup,FormControl, Validators ,FormBuilder} from '@angular/forms';
 import { Location } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDatepickerInputEvent, MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Params } from '@angular/router';
-import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-add-edit-release',

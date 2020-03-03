@@ -18,7 +18,7 @@ export class IssuesComponent implements OnInit{
   public TodoList:GetIssueData[]=[];
   public InProgressList:GetIssueData[]=[];
   public CompletedList:GetIssueData[]=[];
-
+public issuesDt;
   constructor(private route:ActivatedRoute,private router:Router,
     private matDialog:MatDialog,private _snackBar:MatSnackBar,
     private http:HttpClient) { }
@@ -52,9 +52,8 @@ export class IssuesComponent implements OnInit{
 
   drop(event: CdkDragDrop<string[]>) {
     const id=event.container.id;
-    console.log(id);
+    this.issuesDt=event.container.data;
 
-//event.container.data[event.currentIndex]['id'];
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -62,10 +61,7 @@ export class IssuesComponent implements OnInit{
                         event.container.data,
                         event.previousIndex,
                         event.currentIndex);
-    console.log(event.previousContainer.data,
-                event.container.data,
-                event.previousIndex,
-                event.currentIndex);   
+                         
       const y=event.container.data.length;
       const index=event.currentIndex;   
         if(index>=y/2)
@@ -73,6 +69,10 @@ export class IssuesComponent implements OnInit{
           console.log(y/2);
         }else{
           console.log(index,id);
+          //get order of prev and next item
+         const previtemOrder=this.issuesDt[event.currentIndex-1];
+         const nextitem=this.issuesDt[event.currentIndex+1];
+          console.log(previtemOrder,nextitem);
         }  
     }
   }
