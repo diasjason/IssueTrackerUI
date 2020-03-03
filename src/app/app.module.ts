@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule} from '@angular/common/http';
+import { HttpClientModule,HTTP_INTERCEPTORS} from '@angular/common/http';
 import { FormsModule} from '@angular/forms';
 import { ReactiveFormsModule} from '@angular/forms';
 
@@ -20,7 +20,7 @@ import{MatCardModule,
   MatDatepickerModule, 
   MatNativeDateModule,
   MatDialogModule,
-  MatSelectModule,MatButtonModule,MatIconModule
+  MatSelectModule,MatButtonModule,MatIconModule,MatSnackBarModule
 }  from '@angular/material';
 import { LayoutModule } from '@angular/cdk/layout';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -32,6 +32,10 @@ import { AddEditSprintComponent } from './Components/add-edit-sprint/add-edit-sp
 import { AddEditReleaseComponent } from './Components/add-edit-release/add-edit-release.component';
 import { ReusableModalComponent } from './Components/reusable-modal/reusable-modal.component';
 import { ReleaseComponent } from './Components/release/release.component';
+import { UserService } from './services/user.service';
+import { LoginFormComponent } from './Components/login-form/login-form.component';
+import { JwtInterceptor } from './jwt-interceptor';
+import { IssuesComponent } from './Components/issues/issues.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +45,9 @@ import { ReleaseComponent } from './Components/release/release.component';
     AddEditSprintComponent,
     AddEditReleaseComponent,
     ReusableModalComponent,
-    ReleaseComponent
+    ReleaseComponent,
+    LoginFormComponent,
+    IssuesComponent
   ],
   imports: [
     BrowserModule,
@@ -66,9 +72,14 @@ import { ReleaseComponent } from './Components/release/release.component';
     MatDatepickerModule, 
     MatNativeDateModule,
     MatDialogModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSnackBarModule
   ],
-  providers: [IssueTrackerService],
+  providers: [IssueTrackerService,UserService,{
+    provide: HTTP_INTERCEPTORS,
+    useClass: JwtInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent],
   exports:[MatTableModule,MatSortModule,MatPaginatorModule],
   entryComponents:[AddEditSprintComponent,AddEditReleaseComponent,ReusableModalComponent]

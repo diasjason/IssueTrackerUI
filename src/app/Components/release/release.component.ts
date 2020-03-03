@@ -2,9 +2,11 @@ import { Component, OnInit,ViewChild, AfterViewInit } from '@angular/core';
 import { CreateReleaseRequest, GetReleaseData, Release, ReleasesClient}from 'src/app/services/issue-tracker.service';
 import { FormGroup, Validators ,FormBuilder} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatTableDataSource, MatSort,MatPaginator, MatDialogConfig, MatDialog } from '@angular/material';
+import { MatTableDataSource, MatSort,MatPaginator, MatDialogConfig, MatDialog} from '@angular/material';
 import { AddEditReleaseComponent } from '../add-edit-release/add-edit-release.component';
 import { ReusableModalComponent } from '../reusable-modal/reusable-modal.component';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-release',
@@ -14,13 +16,14 @@ import { ReusableModalComponent } from '../reusable-modal/reusable-modal.compone
 export class ReleaseComponent implements OnInit {
 
   public dataSource = new MatTableDataSource<GetReleaseData>();
-  public displayedColumns = ['releaseName', 'startDate','endDate','details','update', 'delete'];
-  release:ReleasesClient = new ReleasesClient();
+  
+  public displayedColumns = ['releaseName', 'startDate','endDate','sprintStatusName','update','delete'];
+  release:ReleasesClient = new ReleasesClient(this.http,"");
 
    @ViewChild(MatSort,{static:false}) sort: MatSort;
    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;   
 
-  constructor(private route:ActivatedRoute,private router:Router,private matDialog:MatDialog)
+  constructor(private route:ActivatedRoute,private router:Router,private matDialog:MatDialog,private http:HttpClient)
    {    }
 
   ngOnInit() {   
@@ -33,7 +36,7 @@ export class ReleaseComponent implements OnInit {
   }
   
   getReleaseList() {
-    this.release.getReleaseList().then(res=>{              
+    this.release.getReleaseList().subscribe(res=>{     
        this.dataSource.data = res as GetReleaseData[];        
     });    
   }
@@ -46,26 +49,32 @@ export class ReleaseComponent implements OnInit {
   public redirectToDelete(id):void  {
     this.openCofirmationModal(id);
   }
-  public redirectToDetails(id):void{}
+  // public redirectToDetails(id):void{}
 
   openModal() {
     const dialogConfig = new MatDialogConfig();   
-    this.matDialog.open(AddEditReleaseComponent,{ data:{id:0}});  
+    let model=this.matDialog.open(AddEditReleaseComponent,{ data:{id:0}});  
+    model.afterClosed().subscribe(res=>{
+      this.getReleaseList();
+    });
   }
  
   openCofirmationModal(id) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
-    dialogConfig.id = "modal-component";
+    dialogConfig.id = "Release-component";
     dialogConfig.height = "150px";
     dialogConfig.width = "400px";
     dialogConfig.data = {
-      name: "Delete",
+      name: "Release",
       title: "Are you sure you want to Delete?",
       actionButtonText: "Delete",
-      ReleaseId:id
+      Id:id
     }
     const modalDialog = this.matDialog.open(ReusableModalComponent, dialogConfig);
+    modalDialog.afterClosed().subscribe(res=>{      
+      this.getReleaseList();
+    });
   }
 }
 

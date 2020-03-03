@@ -3,8 +3,9 @@ import { Component, OnInit, Inject, Optional } from '@angular/core';
 import { SprintsClient, CreateSprintRequest, EditSprintRequest, GetSprintStatusData}from 'src/app/services/issue-tracker.service';
 import { FormGroup,FormControl, Validators ,FormBuilder} from '@angular/forms';
 import { Location } from '@angular/common';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDatepickerInputEvent, MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Params } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-aesprint',
@@ -13,18 +14,29 @@ import { ActivatedRoute, Params } from '@angular/router';
 })
 export class AddEditSprintComponent implements OnInit {
   sprintId:string='';
+  minDate:Date;
+  minEndDate:Date;
+  maxDate:Date;
   editMode = false;
   pageTitle: string;
   sprintForm:FormGroup;
   AddButton=true;
-  sprint:SprintsClient = new SprintsClient(); 
+  sprint:SprintsClient = new SprintsClient(this.http,""); 
   public SprintStatus;
 
   constructor(private location: Location,private fb:FormBuilder,
-            public dialogRef: MatDialogRef<AddEditSprintComponent>,
-             @Inject(MAT_DIALOG_DATA)public data:any,private route:ActivatedRoute)  { }
+            public dialogRef: MatDialogRef<AddEditSprintComponent>,private _snackBar:MatSnackBar,
+             @Inject(MAT_DIALOG_DATA)public data:any,private route:ActivatedRoute,private http:HttpClient) 
+     { 
+      const currentYear = new Date().getFullYear();
+      const today=new Date().getDate();
+      const month=new Date().getMonth();
+      this.minDate = new Date(currentYear , month, today);
+      this.maxDate = new Date(currentYear + 1, 11, 31);
+      this.minEndDate=new Date(currentYear , month, today);
+     }
 
-
+     
   ngOnInit() {   
     this.createForm();
     this.sprintId=this.data.id?this.data.id:''
@@ -33,7 +45,7 @@ export class AddEditSprintComponent implements OnInit {
     this.pageTitle=this.editMode?'Edit Sprint':'Add Sprint';  
   }
 
-  sprintStatuslist= this.sprint.getSprintStatusList().then(res=>{
+  sprintStatuslist= this.sprint.getSprintStatusList().subscribe(res=>{    
     this.SprintStatus=res as GetSprintStatusData[];   
   });
 
@@ -43,20 +55,26 @@ export class AddEditSprintComponent implements OnInit {
       sprintId:this.sprintId?this.sprintId:'',
       sprintName:['',[Validators.required,Validators.minLength(5)]],
       sprintPoints:['',Validators.required],
-      startDate:'',
-      endDate:'',
-      createdBy:'',
-      sprintStatusId:['']
+      startDate:['',Validators.required],
+      endDate:['',Validators.required],
+      createdBy:[''],
+      sprintStatusId:[''],
+      sprintStatusName:''
     });     
   }
+
   private initForm()
   {
     if(this.editMode){  
-       this.sprint.getSprint(this.data.id).then(res=>{   
+       this.sprint.getSprint(this.data.id).subscribe(res=>{   
          this.sprintForm.setValue(res);
+         //mindate validation gives error if editing after the date entered
+         const startdate=res.startDate;
+         this.minDate=startdate;
+         this.minEndDate=new Date(startdate.getFullYear(),startdate.getMonth(),startdate.getDate()+1);
       });
       this.AddButton=false;
-   }
+    }
   }
 
   public hasError = (controlName: string, errorName: string) =>{
@@ -67,16 +85,22 @@ export class AddEditSprintComponent implements OnInit {
     this.dialogRef.close(); 
   }
   
+  addEvent(event: MatDatepickerInputEvent<Date>) {
+    const startDate=event.value.getDate();
+    const curentyear=event.value.getFullYear();
+    const currentMonth=event.value.getMonth();
+    this.minEndDate=new Date(curentyear,currentMonth,startDate+1);    
+  }
+
   onSubmit(){
     if(this.sprintForm.valid){
-      if(!this.editMode){   
-        console.log(this.sprintForm.value);     
+      if(!this.editMode){      
         this.createSprint(this.sprintForm.value);
       }else{
         this.updateSprint(this.sprintForm.value);
       } 
     }
-   }
+  }
  
    createSprint(formvalues){    
        let newSprint: CreateSprintRequest = new CreateSprintRequest();
@@ -85,10 +109,14 @@ export class AddEditSprintComponent implements OnInit {
        newSprint.startDate =formvalues.startDate;
        newSprint.endDate = formvalues.endDate;
        newSprint.sprintStatusId=formvalues.sprintStatusId;
-       this.sprint.postSprint(newSprint).then(res=>{
-           console.log(res);
+       this.sprint.postSprint(newSprint).subscribe(res=>{
+        this._snackBar.open(res.message,"OK",{
+          duration:2000,
+        });
          },error=>{
-           console.log(error);
+          this._snackBar.open(error.message,"OK",{
+            duration:2000,
+          });
          }
        );
        this.dialogRef.close();
@@ -106,14 +134,17 @@ export class AddEditSprintComponent implements OnInit {
       updateSprint.sprintId=parseInt(this.sprintId);
       updateSprint.sprintStatusId=formvalues.sprintStatusId;
 
-      this.sprint.putSprint(updateSprint).then(res=>{
-          console.log(res);
+      this.sprint.putSprint(updateSprint).subscribe(res=>{
+        this._snackBar.open(res.message,"OK",{
+          duration:2000,
+        });console.log(res);
         },error=>{
-          console.log(error);
+          this._snackBar.open(error.message,"OK",{
+            duration:2000,
+          });
         }
       );
       this.dialogRef.close();
    }
-
-   
+  
 }
