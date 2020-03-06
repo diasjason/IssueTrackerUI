@@ -1,0 +1,61 @@
+<p>add-edit-issue works!</p>
+
+<section fxLayout="row wrap" fxLayoutAlign="center center">
+    <mat-card fxFlex="500px" fxFlex.xs="100%">    
+       <!-- Title of an Card -->    
+       <title mat-dialog-title > {{pageTitle}}  </title>
+                 
+        <form [formGroup]="issueForm" autocomplete="off" novalidate (ngSubmit)="onSubmit()" fxLayout="column wrap"
+            fxLayoutAlign="center" fxLayoutGap="20px">
+           <mat-dialog-content>  
+              <mat-form-field>
+                <input matInput type="text" placeholder="subject" formControlName="subject" id="name">
+                <mat-hint align="end">Not less then 5 characters .</mat-hint>
+                <mat-error *ngIf="hasError('subject','required')">subject is required</mat-error>
+                <mat-error *ngIf="hasError('subject', 'minlength')">Please enter min 5 characters</mat-error>
+              </mat-form-field>
+
+              <mat-form-field>
+                <input matInput type="text" placeholder="description" formControlName="description" id="name">
+                <mat-hint align="end">Not less then 5 characters .</mat-hint>
+                <mat-error *ngIf="hasError('description','required')">description is required</mat-error>
+                <mat-error *ngIf="hasError('description', 'minlength')">Please enter min 5 characters</mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput type="text" placeholder="assignedTo" formControlName="assignedTo" id="name">
+                <mat-hint align="end">Not less then 5 characters .</mat-hint>
+                <mat-error *ngIf="hasError('assignedTo','required')">assignedTo is required</mat-error>
+                <mat-error *ngIf="hasError('assignedTo', 'minlength')">Please enter min 5 characters</mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput type="text" placeholder="tags" formControlName="tags" id="name">
+                <mat-hint align="end">Not less then 3 characters .</mat-hint>
+                <mat-error *ngIf="hasError('tags','required')">tags is required</mat-error>
+                <mat-error *ngIf="hasError('tags', 'minlength')">Please enter min 5 characters</mat-error>
+              </mat-form-field>
+
+              <mat-form-field>
+                    <mat-label>Select an option</mat-label>
+                    <mat-select formControlName="issueStatusId" >
+                        <mat-option *ngFor="let status of issueStatusList" [value]="status.issueStatusId">
+                            {{ status.statusName}}
+                        </mat-option>
+                    </mat-select>
+              </mat-form-field>
+           </mat-dialog-content>    
+  
+           <mat-dialog-actions align="center">
+               
+            <div *ngIf="AddButton; else EditButton">
+             <button mat-raised-button color="primary" [disabled]="!issueForm.valid">Create</button>
+            </div>
+            <ng-template #EditButton>
+              <button mat-raised-button color="primary" >Edit</button>
+            </ng-template>
+             <button type="button" mat-raised-button color="warn" (click)="closeDialog()">Close</button>
+           </mat-dialog-actions>
+
+        </form>  
+        
+    </mat-card>  
+</section>

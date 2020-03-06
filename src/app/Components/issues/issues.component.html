@@ -1,4 +1,7 @@
 
+<div>  
+  <a (click)="openModal()" mat-button color="primary">Add Issue</a>
+</div>
 <div class="example-container">
     <h2>TO DO </h2>
 
@@ -9,7 +12,7 @@
          [cdkDropListData]="TodoList"         
          [cdkDropListConnectedTo]="[inProgressList,completedList]"
          (cdkDropListDropped)="drop($event)">      
-      <mat-card *ngFor="let issue of TodoList"  class="example-box" cdkDrag>
+      <mat-card *ngFor="let issue of TodoList"  class="example-box" cdkDrag (click)="redirectToUpdatePage(issue.issueId)">
         <mat-card-header>
           <mat-card-title>{{issue.subject}}</mat-card-title>
           <mat-card-subtitle>{{issue.description}}</mat-card-subtitle>
@@ -25,12 +28,12 @@
 
     <div class="example-list"
          cdkDropList
-         id="InProgress"
+         id="In Progress"
          #inProgressList="cdkDropList"
          [cdkDropListData]="InProgressList"
          [cdkDropListConnectedTo]="[todoList,completedList]"  
          (cdkDropListDropped)="drop($event)">      
-      <mat-card *ngFor="let issue of InProgressList"  class="example-box"  cdkDrag>
+      <mat-card *ngFor="let issue of InProgressList"  class="example-box"  cdkDrag (click)="redirectToUpdatePage(issue.issueId)">
         <mat-card-header>
           <mat-card-title>{{issue.subject}}</mat-card-title>
           <mat-card-subtitle>{{issue.description}}</mat-card-subtitle>
@@ -51,7 +54,7 @@
          [cdkDropListData]="CompletedList"
          [cdkDropListConnectedTo]="[inProgressList,completedList]"  
          (cdkDropListDropped)="drop($event)">      
-      <mat-card *ngFor="let issue of CompletedList"  class="example-box"  cdkDrag>
+      <mat-card *ngFor="let issue of CompletedList"  class="example-box"  cdkDrag (click)="redirectToUpdatePage(issue.issueId)">
         <mat-card-header>
           <mat-card-title>{{issue.subject}}</mat-card-title>
           <mat-card-subtitle>{{issue.description}}</mat-card-subtitle>

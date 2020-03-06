@@ -39,7 +39,7 @@ export class AddEditReleaseComponent implements OnInit {
 
   ngOnInit() {     
     this.createForm();
-    this.releaseId=this.data.id?this.data.id:''
+    this.releaseId=this.data.id?this.data.id:'';
     this.editMode=this.data.id!=0;
     this.initForm();    
     this.pageTitle=this.editMode?'Edit Release':'Add Release';  

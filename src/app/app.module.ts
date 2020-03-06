@@ -36,6 +36,7 @@ import { UserService } from './services/user.service';
 import { LoginFormComponent } from './Components/login-form/login-form.component';
 import { JwtInterceptor } from './jwt-interceptor';
 import { IssuesComponent } from './Components/issues/issues.component';
+import { AddEditIssueComponent } from './Components/add-edit-issue/add-edit-issue.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { IssuesComponent } from './Components/issues/issues.component';
     ReusableModalComponent,
     ReleaseComponent,
     LoginFormComponent,
-    IssuesComponent
+    IssuesComponent,
+    AddEditIssueComponent
   ],
   imports: [
     BrowserModule,
@@ -82,6 +84,6 @@ import { IssuesComponent } from './Components/issues/issues.component';
   }],
   bootstrap: [AppComponent],
   exports:[MatTableModule,MatSortModule,MatPaginatorModule],
-  entryComponents:[AddEditSprintComponent,AddEditReleaseComponent,ReusableModalComponent]
+  entryComponents:[AddEditSprintComponent,AddEditReleaseComponent,AddEditIssueComponent,ReusableModalComponent]
 })
 export class AppModule { }
