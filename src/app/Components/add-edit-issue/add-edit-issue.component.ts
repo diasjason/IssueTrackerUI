@@ -2,10 +2,11 @@ import { Component, OnInit,Inject} from '@angular/core';
 import { IssuesClient,IssueStatusClient, CreateIssueRequest, EditIssueRequest, GetIssueData, GetIssueStatusData}from 'src/app/services/issue-tracker.service';
 import { FormGroup,FormControl, Validators ,FormBuilder} from '@angular/forms';
 import { Location } from '@angular/common';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDatepickerInputEvent, MatSnackBar } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDatepickerInputEvent, MatSnackBar, MatDialogConfig, MatDialog } from '@angular/material';
 import { ActivatedRoute, Params } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Route } from '@angular/compiler/src/core';
+import { ReusableModalComponent } from '../reusable-modal/reusable-modal.component';
 
 @Component({
   selector: 'app-add-edit-issue',
@@ -19,12 +20,14 @@ export class AddEditIssueComponent implements OnInit {
   pageTitle: string;
   issueForm:FormGroup;
   AddButton=true;
+  DeleteButton=false;
   issue:IssuesClient = new IssuesClient(this.http,""); 
   issueStatus:IssueStatusClient= new  IssueStatusClient(this.http,"");
   public issueStatusList;
 
   constructor(private http:HttpClient,private fb:FormBuilder,private dialogRef:MatDialogRef<AddEditIssueComponent>,
-    private route:ActivatedRoute,private _snackBar:MatSnackBar,@Inject(MAT_DIALOG_DATA)public data:any) { }
+    private route:ActivatedRoute,private _snackBar:MatSnackBar,@Inject(MAT_DIALOG_DATA)public data:any
+    ,private matDialog:MatDialog) { }
 
   ngOnInit() {    
     this.createForm();
@@ -56,6 +59,7 @@ export class AddEditIssueComponent implements OnInit {
     if(this.editMode){  
        this.issue.getIssue(this.data.id).subscribe(res=>{
          this.issueForm.setValue(res);
+         this.DeleteButton=true;
       });
       this.AddButton=false;
    }
@@ -99,7 +103,7 @@ export class AddEditIssueComponent implements OnInit {
        this.dialogRef.close();
    }
 
-   updateIssue(formvalues) {      
+   updateIssue(formvalues) {    
       let updateIssue: EditIssueRequest = new EditIssueRequest();      
       updateIssue.subject = formvalues.subject;
       updateIssue.description = formvalues.description;
@@ -119,4 +123,27 @@ export class AddEditIssueComponent implements OnInit {
       );
       this.dialogRef.close();
    }
+
+   Delete(issueId):void {      
+    this.openCofirmationModal(issueId);
+   }
+
+    
+  openCofirmationModal(id) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.id = "Issue-component";
+    dialogConfig.height = "150px";
+    dialogConfig.width = "400px";
+    dialogConfig.data = {
+      name: "Issue",
+      title: "Are you sure you want to Delete?",
+      actionButtonText: "Delete",
+      Id:id
+    }
+    const modalDialog = this.matDialog.open(ReusableModalComponent, dialogConfig);
+    modalDialog.afterClosed().subscribe(res=>{    
+      this.dialogRef.close();
+    });
+  }
 }

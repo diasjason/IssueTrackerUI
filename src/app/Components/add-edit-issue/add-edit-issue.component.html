@@ -1,10 +1,14 @@
-<p>add-edit-issue works!</p>
+
 
 <section fxLayout="row wrap" fxLayoutAlign="center center">
     <mat-card fxFlex="500px" fxFlex.xs="100%">    
        <!-- Title of an Card -->    
        <title mat-dialog-title > {{pageTitle}}  </title>
-                 
+       <div *ngIf="DeleteButton" align="end">              
+        <button mat-icon-button color="accent" (click)="Delete(issueId)">
+          <mat-icon class="mat-18">delete</mat-icon></button>
+        
+      </div>
         <form [formGroup]="issueForm" autocomplete="off" novalidate (ngSubmit)="onSubmit()" fxLayout="column wrap"
             fxLayoutAlign="center" fxLayoutGap="20px">
            <mat-dialog-content>  
@@ -34,6 +38,8 @@
                 <mat-error *ngIf="hasError('tags', 'minlength')">Please enter min 5 characters</mat-error>
               </mat-form-field>
 
+              
+            <div *ngIf="AddButton">
               <mat-form-field>
                     <mat-label>Select an option</mat-label>
                     <mat-select formControlName="issueStatusId" >
@@ -41,20 +47,26 @@
                             {{ status.statusName}}
                         </mat-option>
                     </mat-select>
+              
               </mat-form-field>
+            </div>
            </mat-dialog-content>    
-  
+
            <mat-dialog-actions align="center">
                
             <div *ngIf="AddButton; else EditButton">
-             <button mat-raised-button color="primary" [disabled]="!issueForm.valid">Create</button>
+             <button mat-raised-button color="primary" [disabled]="!issueForm.valid">Add </button>
             </div>
             <ng-template #EditButton>
-              <button mat-raised-button color="primary" >Edit</button>
+              <button mat-raised-button color="primary" >Update</button>             
             </ng-template>
+              <!-- <div *ngIf="DeleteButton">              
+                <button mat-raised-button color="warn" (click)="Delete(issueId)">Delete</button>
+              </div> -->
+            
              <button type="button" mat-raised-button color="warn" (click)="closeDialog()">Close</button>
            </mat-dialog-actions>
-
+           
         </form>  
         
     </mat-card>  

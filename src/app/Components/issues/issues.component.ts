@@ -26,10 +26,11 @@ export class IssuesComponent implements OnInit{
     private http:HttpClient) {     }
 
   ngOnInit() {
-      this.getIssuesist();
+      this.getIssuesList();
   }
 
-  getIssuesist()  {
+  getIssuesList()  {
+   
     this.issues.getIssueList().subscribe(res=>{  
       this.issueList=res as GetIssueData[];  
       this.SortIssues(this.issueList);  
@@ -98,7 +99,7 @@ export class IssuesComponent implements OnInit{
       this._snackBar.open(res.message,"Moved Successfully",{
         duration:2000,
       });
-      this.getIssuesist();
+      this.getIssuesList();
     },error=>{
         this._snackBar.open(error.message,"OK",{
            duration:2000,  });
@@ -107,14 +108,17 @@ export class IssuesComponent implements OnInit{
   
   public redirectToUpdatePage(id):void{     
     const dialogConfig = new MatDialogConfig();
-    this.matDialog.open(AddEditIssueComponent,{ data:{id}});    
+    let model= this.matDialog.open(AddEditIssueComponent,{ data:{id}});   
+    model.afterClosed().subscribe(res=>{
+         this.getIssuesList();
+      });
   }
 
   openModal() {
     const dialogConfig = new MatDialogConfig();   
     let model=this.matDialog.open(AddEditIssueComponent,{ data:{id:0}});  
     model.afterClosed().subscribe(res=>{
-      this.getIssuesist();
+      this.getIssuesList();
     });
   }
 
