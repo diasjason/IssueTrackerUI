@@ -24,7 +24,6 @@ export class AddEditIssueComponent implements OnInit {
   issue:IssuesClient = new IssuesClient(this.http,""); 
   issueStatus:IssueStatusClient= new  IssueStatusClient(this.http,"");
   public issueStatusList;
-
   constructor(private http:HttpClient,private fb:FormBuilder,private dialogRef:MatDialogRef<AddEditIssueComponent>,
     private route:ActivatedRoute,private _snackBar:MatSnackBar,@Inject(MAT_DIALOG_DATA)public data:any
     ,private matDialog:MatDialog) { }
@@ -45,10 +44,10 @@ export class AddEditIssueComponent implements OnInit {
     this.issueForm=this.fb.group({      
       issueId:this.issueId?this.issueId:'',
       subject:['',[Validators.required,Validators.minLength(5)]],     
-      description:'',
-      assignedTo:'',
-      tags:'',
-      issueStatusId:[''],
+      description:['',[Validators.required,Validators.minLength(10)]],
+      assignedTo:['',Validators.required],
+      tags:['',Validators.required],
+      issueStatusId:['',[Validators.required,Validators.min(1)]],
       statusName:'',
       createdBy:'',
       order:''
